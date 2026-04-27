@@ -1,0 +1,16 @@
+<svg width="800" height="520" viewBox="0 0 800 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="520" rx="32" fill="#0C447C" />
+  <rect x="56" y="56" width="688" height="128" rx="24" fill="#E6F1FB" />
+  <rect x="80" y="96" width="240" height="24" rx="12" fill="#0C447C" />
+  <rect x="80" y="138" width="160" height="18" rx="9" fill="#0C447C" opacity="0.75" />
+  <rect x="56" y="216" width="688" height="232" rx="24" fill="#185FA5" />
+  <rect x="88" y="250" width="192" height="24" rx="12" fill="#E6F1FB" />
+  <rect x="88" y="292" width="108" height="18" rx="9" fill="#E6F1FB" opacity="0.75" />
+  <rect x="88" y="334" width="140" height="18" rx="9" fill="#E6F1FB" opacity="0.5" />
+  <rect x="370" y="250" width="320" height="160" rx="24" fill="#D9EFFF" />
+  <circle cx="470" cy="310" r="50" fill="#0C447C" />
+  <circle cx="530" cy="310" r="24" fill="#378ADD" />
+  <circle cx="430" cy="350" r="18" fill="#85B7EB" />
+  <text x="70" y="470" fill="#E6F1FB" font-family="Inter, sans-serif" font-size="34" font-weight="700">Stock</text>
+  <text x="70" y="504" fill="#B5D4F4" font-family="Inter, sans-serif" font-size="18" font-weight="500">Gestion boutique</text>
+</svg>

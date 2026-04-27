@@ -1,0 +1,14 @@
+<svg width="800" height="520" viewBox="0 0 800 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="520" rx="32" fill="#378ADD" />
+  <rect x="56" y="56" width="688" height="128" rx="24" fill="#E6F1FB" />
+  <rect x="80" y="96" width="280" height="24" rx="12" fill="#378ADD" />
+  <rect x="80" y="138" width="180" height="18" rx="9" fill="#378ADD" opacity="0.7" />
+  <rect x="80" y="240" width="620" height="192" rx="24" fill="#02192E" />
+  <rect x="110" y="280" width="140" height="18" rx="9" fill="#85B7EB" />
+  <rect x="110" y="320" width="420" height="18" rx="9" fill="#85B7EB" />
+  <rect x="110" y="360" width="240" height="18" rx="9" fill="#85B7EB" />
+  <rect x="550" y="280" width="48" height="48" rx="16" fill="#E6F1FB" />
+  <rect x="550" y="346" width="48" height="18" rx="9" fill="#E6F1FB" />
+  <text x="70" y="470" fill="#E6F1FB" font-family="Inter, sans-serif" font-size="34" font-weight="700">VitrinePro</text>
+  <text x="70" y="504" fill="#B5D4F4" font-family="Inter, sans-serif" font-size="18" font-weight="500">Dashboard entreprise</text>
+</svg>

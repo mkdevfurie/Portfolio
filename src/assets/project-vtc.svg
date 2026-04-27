@@ -1,0 +1,14 @@
+<svg width="800" height="520" viewBox="0 0 800 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="520" rx="32" fill="#185FA5" />
+  <rect x="56" y="56" width="688" height="128" rx="24" fill="#E6F1FB" />
+  <rect x="80" y="96" width="240" height="24" rx="12" fill="#185FA5" />
+  <rect x="80" y="138" width="180" height="18" rx="9" fill="#185FA5" opacity="0.7" />
+  <path d="M120 250H680L700 320H100L120 250Z" fill="#E6F1FB" />
+  <circle cx="200" cy="360" r="44" fill="#0C447C" />
+  <circle cx="570" cy="360" r="44" fill="#0C447C" />
+  <rect x="188" y="346" width="24" height="28" rx="12" fill="#85B7EB" />
+  <rect x="558" y="346" width="24" height="28" rx="12" fill="#85B7EB" />
+  <rect x="360" y="260" width="160" height="64" rx="20" fill="#0C447C" />
+  <text x="70" y="470" fill="#E6F1FB" font-family="Inter, sans-serif" font-size="34" font-weight="700">KOOGWE</text>
+  <text x="70" y="504" fill="#B5D4F4" font-family="Inter, sans-serif" font-size="18" font-weight="500">Transport VTC</text>
+</svg>
