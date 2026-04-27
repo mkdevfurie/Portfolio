@@ -653,7 +653,7 @@ function Contact() {
       // 📝 Inscris-toi sur https://web3forms.com (gratuit)
       // puis remplace la clé Access-Key ci-dessous
       const formData = new FormData(e.target);
-      formData.append("access_key", "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6"); // ← À REMPLACER
+      formData.append("access_key", "35da6fc1-104a-463b-8305-db47886b934c"); // ← Clé Web3Forms
 
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
