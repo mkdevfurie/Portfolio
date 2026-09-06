@@ -1,16 +1,24 @@
-# React + Vite
+# Portfolio — KPEMOUA David
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Portfolio 3D immersif, piloté par un CMS.
 
-Currently, two official plugins are available:
+- **Front** : React 19 + TypeScript + Vite
+- **3D** : React Three Fiber / three.js / postprocessing — monde scrollable,
+  caméra animée par section, cristal central, allée de monolithes de projets
+- **Animations** : Motion (Framer Motion) + Lenis (smooth scroll)
+- **CMS** : Sanity (`studio/`) — projets, compétences, parcours, services,
+  réglages ; contenu de repli local si le CMS n'est pas branché
+- **Contact** : Web3Forms + lien WhatsApp
+- **Déploiement** : Netlify
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Démarrage rapide
 
-## React Compiler
+```bash
+npm install
+npm run dev
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Le site tourne immédiatement avec le contenu de `src/content/fallback.ts`.
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+👉 **Configuration complète (CMS, ajout de projets, déploiement) : voir
+[`SETUP.md`](./SETUP.md).**

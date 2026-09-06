@@ -22,3 +22,15 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Sanity
+studio/dist
+studio/node_modules
+
+# TS build info
+*.tsbuildinfo

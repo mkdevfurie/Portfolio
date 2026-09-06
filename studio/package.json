@@ -1,0 +1,24 @@
+{
+  "name": "portfolio-studio",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Sanity Studio — contenu du portfolio 3D",
+  "type": "module",
+  "scripts": {
+    "dev": "sanity dev",
+    "start": "sanity start",
+    "build": "sanity build",
+    "deploy": "sanity deploy",
+    "typegen": "sanity schema extract && sanity typegen generate"
+  },
+  "dependencies": {
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "sanity": "^4.10.0",
+    "styled-components": "^6.1.13"
+  },
+  "devDependencies": {
+    "@sanity/vision": "^4.10.0",
+    "typescript": "^5.9.2"
+  }
+}
