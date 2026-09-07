@@ -5,6 +5,8 @@ const dataset = process.env.SANITY_STUDIO_DATASET || 'production'
 
 export default defineCliConfig({
   api: { projectId, dataset },
-  /** Autorise `npm run dev` même si l'auto-update de version pose souci. */
-  autoUpdates: true,
+  deployment: {
+    autoUpdates: true,
+    appId: 'z2ibetxv0zt6pvezsszv6ejk',
+  },
 })
