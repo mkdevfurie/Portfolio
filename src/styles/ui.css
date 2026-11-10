@@ -564,8 +564,8 @@
   flex-shrink: 0;
 }
 .skill__icon img {
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   object-fit: contain;
 }
 .skill__icon span {

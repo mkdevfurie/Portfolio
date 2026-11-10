@@ -23,7 +23,7 @@ export interface CamKey {
 }
 
 export const CAMERA_PATH: CamKey[] = [
-  // hero — le cristal flotte à droite du titre
+  // hero — le globe flotte à droite du titre
   { pos: new THREE.Vector3(0, 0.3, 7), target: new THREE.Vector3(0, 0.25, 0) },
   // about — on glisse sur la droite, léger recul
   { pos: new THREE.Vector3(3.6, 0.9, 7.6), target: new THREE.Vector3(0.4, 0.2, 0) },
@@ -33,7 +33,7 @@ export const CAMERA_PATH: CamKey[] = [
   { pos: new THREE.Vector3(-4.4, 2.4, 7), target: new THREE.Vector3(0.2, 0.3, -1) },
   // journey — travelling latéral lent
   { pos: new THREE.Vector3(3.2, 0.5, 7.8), target: new THREE.Vector3(0.1, 0.2, -2) },
-  // contact — recentrage, le cristal se rapproche
+  // contact — recentrage, le globe se rapproche
   { pos: new THREE.Vector3(0, 0.4, 5.6), target: new THREE.Vector3(0, 0.25, 0) },
 ]
 

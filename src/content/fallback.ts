@@ -4,6 +4,7 @@
  * Reprend les donnees de l'ancien portfolio mono-fichier.
  */
 import type { PortfolioContent } from '@/types/content'
+import { stackLogo } from './stackLogos'
 
 import projectStock from '@/assets/SAE.png'
 import projectVTC from '@/assets/KOOGWE.png'
@@ -17,13 +18,6 @@ import coverAtlas from '@/assets/projects/atlas.webp'
 import coverTracteur from '@/assets/projects/tracteur.webp'
 import coverPeya from '@/assets/projects/peya.webp'
 import coverMpl from '@/assets/projects/mpl.webp'
-import logoReact from '@/assets/logo-react.svg'
-import logoPostgres from '@/assets/logo-postgres.svg'
-import logoFlutter from '@/assets/logo-flutter.svg'
-import logoFigma from '@/assets/logo-figma.svg'
-import logoAppInventor from '@/assets/logo-appinventor.svg'
-import logoNestJS from '@/assets/logo-nestjs.svg'
-import logoAngular from '@/assets/logo-angular.svg'
 
 export const fallbackContent: PortfolioContent = {
   settings: {
@@ -347,13 +341,13 @@ export const fallbackContent: PortfolioContent = {
   ],
 
   skills: [
-    { _id: 's-react', name: 'ReactJS / TS', detail: 'Applications web modernes', icon: { src: logoReact, alt: 'React' }, order: 1 },
-    { _id: 's-angular', name: 'Angular', detail: 'Applications web structurées (TypeScript)', icon: { src: logoAngular, alt: 'Angular' }, order: 2 },
-    { _id: 's-postgres', name: 'PostgreSQL', detail: 'Bases de données relationnelles', icon: { src: logoPostgres, alt: 'PostgreSQL' }, order: 3 },
-    { _id: 's-flutter', name: 'Flutter', detail: 'Applications mobiles multiplateformes', icon: { src: logoFlutter, alt: 'Flutter' }, order: 4 },
-    { _id: 's-nestjs', name: 'NestJS', detail: 'API backend modulaires', icon: { src: logoNestJS, alt: 'NestJS' }, order: 5 },
-    { _id: 's-figma', name: 'Figma', detail: 'Design UI/UX', icon: { src: logoFigma, alt: 'Figma' }, order: 6 },
-    { _id: 's-appinventor', name: 'App Inventor', detail: 'Prototypage rapide', icon: { src: logoAppInventor, alt: 'App Inventor' }, order: 7 },
+    { _id: 's-react', name: 'ReactJS / TS', detail: 'Applications web modernes', icon: stackLogo('ReactJS / TS'), order: 1 },
+    { _id: 's-angular', name: 'Angular', detail: 'Applications web structurées (TypeScript)', icon: stackLogo('Angular'), order: 2 },
+    { _id: 's-postgres', name: 'PostgreSQL', detail: 'Bases de données relationnelles', icon: stackLogo('PostgreSQL'), order: 3 },
+    { _id: 's-flutter', name: 'Flutter', detail: 'Applications mobiles multiplateformes', icon: stackLogo('Flutter'), order: 4 },
+    { _id: 's-nestjs', name: 'NestJS', detail: 'API backend modulaires', icon: stackLogo('NestJS'), order: 5 },
+    { _id: 's-figma', name: 'Figma', detail: 'Design UI/UX', icon: stackLogo('Figma'), order: 6 },
+    { _id: 's-appinventor', name: 'App Inventor', detail: 'Prototypage rapide', icon: stackLogo('App Inventor'), order: 7 },
   ],
 
   experience: [

@@ -5,7 +5,7 @@ import type { Quality } from './useQuality'
 import { CameraRig } from './CameraRig'
 import { Stage } from './Stage'
 import { Starfield } from './Starfield'
-import { Crystal } from './Crystal'
+import { Globe } from './Globe'
 import { Monoliths } from './Monoliths'
 import { Effects } from './Effects'
 import { FloatingShapes } from './FloatingShapes'
@@ -22,7 +22,9 @@ export function World({ projects, quality }: Props) {
       <CameraRig reducedMotion={quality.reducedMotion} />
       <Stage quality={quality} />
       <Starfield count={quality.starCount} reducedMotion={quality.reducedMotion} />
-      <Crystal reducedMotion={quality.reducedMotion} />
+      <Suspense fallback={null}>
+        <Globe reducedMotion={quality.reducedMotion} />
+      </Suspense>
       <FloatingShapes count={quality.isMobile ? 10 : 18} reducedMotion={quality.reducedMotion} />
 
       <Suspense fallback={null}>

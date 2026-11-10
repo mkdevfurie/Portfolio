@@ -1,6 +1,7 @@
 import { client, sanityEnabled } from './sanity'
 import { contentQuery } from './queries'
 import { fallbackContent } from '@/content/fallback'
+import { stackLogo } from '@/content/stackLogos'
 import type {
   ContentSource,
   ImageRef,
@@ -81,7 +82,7 @@ function normaliseSkill(raw: Record<string, unknown>, index: number): Skill {
     name: String(raw.name ?? 'Compétence'),
     detail: String(raw.detail ?? ''),
     category: raw.category ? String(raw.category) : undefined,
-    icon: cleanImage(raw.icon),
+    icon: cleanImage(raw.icon) ?? stackLogo(String(raw.name ?? '')),
     order: typeof raw.order === 'number' ? raw.order : index + 1,
   }
 }
