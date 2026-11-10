@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useLayoutEffect, useMemo, useState, type ReactNode } from 'react'
 import { useSettings } from '@/content/hooks'
+import { faviconDataUrl } from './favicon'
 import { DEFAULT_THEME, getTheme, type Theme, type ThemeId } from './themes'
 
 const STORAGE_KEY = 'portfolio-theme'
@@ -55,6 +56,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     root.dataset.themeMode = theme.isLight ? 'light' : 'dark'
     root.style.colorScheme = theme.isLight ? 'light' : 'dark'
     document.querySelector('meta[name="theme-color"]')?.setAttribute('content', ui.bg)
+    // le logo de l'onglet prend les couleurs du thème
+    document
+      .querySelector('link[rel="icon"][type="image/svg+xml"]')
+      ?.setAttribute('href', faviconDataUrl({ bg: ui.bg, primary: p.primary, accent: p.accent, light: p.light }))
   }, [theme])
 
   useEffect(() => {
