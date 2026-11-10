@@ -16,8 +16,8 @@
   --bg: #030b18;
   --panel: rgba(8, 24, 46, 0.55);
   --panel-solid: #071a30;
-  --panel-border: rgba(133, 183, 235, 0.18);
-  --panel-border-strong: rgba(133, 183, 235, 0.4);
+  --panel-border: color-mix(in srgb, var(--c-light) 18%, transparent);
+  --panel-border-strong: color-mix(in srgb, var(--c-light) 40%, transparent);
   --text: #dbe8f7;
   --text-dim: #8ba7c7;
   --text-bright: #f4f9ff;
@@ -26,8 +26,8 @@
   --radius: 20px;
   --radius-lg: 30px;
 
-  --shadow-glow: 0 0 60px -12px rgba(55, 138, 221, 0.55);
-  --shadow-panel: 0 30px 80px -40px rgba(2, 12, 28, 0.9);
+  --shadow-glow: 0 0 60px -12px color-mix(in srgb, var(--c-accent) 55%, transparent);
+  --shadow-panel: 0 30px 80px -40px color-mix(in srgb, var(--bg) 90%, transparent);
 
   --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-display: 'Space Grotesk', var(--font-sans);
@@ -230,7 +230,7 @@ h4 {
 }
 .btn--primary:hover {
   transform: translateY(-3px);
-  box-shadow: 0 0 80px -8px rgba(55, 138, 221, 0.8);
+  box-shadow: 0 0 80px -8px color-mix(in srgb, var(--c-accent) 80%, transparent);
 }
 .btn--ghost {
   border: 1px solid var(--panel-border-strong);
@@ -238,7 +238,7 @@ h4 {
 }
 .btn--ghost:hover {
   transform: translateY(-3px);
-  background: rgba(133, 183, 235, 0.08);
+  background: color-mix(in srgb, var(--c-light) 8%, transparent);
 }
 
 /* ---- Badges ---- */
@@ -249,7 +249,7 @@ h4 {
   letter-spacing: 0.03em;
   padding: 4px 11px;
   border-radius: 999px;
-  background: rgba(133, 183, 235, 0.12);
+  background: color-mix(in srgb, var(--c-light) 12%, transparent);
   border: 1px solid var(--panel-border);
   color: var(--c-light);
 }
@@ -297,7 +297,7 @@ h4 {
   padding: 5px 10px;
   border-radius: 999px;
   border: 1px solid var(--panel-border);
-  background: rgba(3, 11, 24, 0.7);
+  background: color-mix(in srgb, var(--bg) 70%, transparent);
   color: var(--text-dim);
   backdrop-filter: blur(6px);
 }

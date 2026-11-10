@@ -1,20 +1,72 @@
-import { useState } from 'react'
-import { AnimatePresence, motion } from 'motion/react'
+import { useMemo, useState, type PointerEvent } from 'react'
+import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from 'motion/react'
 import { Reveal } from '@/components/Reveal'
 import { Tag, StatusBadge } from '@/components/Badges'
 import { useProjects } from '@/content/hooks'
 import { EASE } from '@/lib/motion'
 import type { Project } from '@/types/content'
 
+type Filter = 'all' | 'web' | 'mobile' | 'ia'
+
+const FILTERS: { id: Filter; label: string }[] = [
+  { id: 'all', label: 'Tous' },
+  { id: 'web', label: 'Web' },
+  { id: 'mobile', label: 'Mobile' },
+  { id: 'ia', label: 'IA' },
+]
+
+/** Catégories déduites des tags (aucun champ CMS supplémentaire nécessaire). */
+function matches(project: Project, f: Filter) {
+  if (f === 'all') return true
+  const tags = project.tags.map((t) => t.toLowerCase())
+  if (f === 'mobile') return tags.some((t) => /flutter|react native|android|ios|pwa/.test(t))
+  if (f === 'ia') return tags.some((t) => /\bia\b|gemma|llm|python|openai/.test(t))
+  return tags.some((t) => /react|next|vue|site|web|vite/.test(t))
+}
+
 function ProjectCard({ project, onOpen }: { project: Project; onOpen: () => void }) {
+  // inclinaison 3D qui suit le pointeur
+  const mx = useMotionValue(0)
+  const my = useMotionValue(0)
+  const sx = useSpring(mx, { stiffness: 220, damping: 20 })
+  const sy = useSpring(my, { stiffness: 220, damping: 20 })
+  const rotateY = useTransform(sx, [-0.5, 0.5], [-9, 9])
+  const rotateX = useTransform(sy, [-0.5, 0.5], [8, -8])
+  const glareX = useTransform(sx, [-0.5, 0.5], ['0%', '100%'])
+  const glareY = useTransform(sy, [-0.5, 0.5], ['0%', '100%'])
+
+  const onMove = (e: PointerEvent<HTMLElement>) => {
+    if (e.pointerType !== 'mouse') return
+    const r = e.currentTarget.getBoundingClientRect()
+    mx.set((e.clientX - r.left) / r.width - 0.5)
+    my.set((e.clientY - r.top) / r.height - 0.5)
+  }
+  const onLeave = () => {
+    mx.set(0)
+    my.set(0)
+  }
+
   return (
     <motion.article
       className="pcard"
       onClick={onOpen}
+      onPointerMove={onMove}
+      onPointerLeave={onLeave}
       whileHover={{ y: -8 }}
       transition={{ type: 'spring', stiffness: 260, damping: 22 }}
-      style={{ ['--pc-bg' as string]: project.bgColor }}
+      style={{
+        ['--pc-bg' as string]: project.bgColor,
+        ['--gx' as string]: glareX,
+        ['--gy' as string]: glareY,
+        rotateX,
+        rotateY,
+        transformPerspective: 900,
+      }}
+      tabIndex={0}
+      onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), onOpen())}
+      aria-label={`${project.title} — voir les détails`}
     >
+      <span className="pcard__glare" aria-hidden />
       <div className="pcard__media">
         {project.cover?.src ? (
           <img src={project.cover.src} alt={project.cover.alt} loading="lazy" />
@@ -117,7 +169,13 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
 export function Projects() {
   const projects = useProjects()
   const [openId, setOpenId] = useState<string | null>(null)
+  const [filter, setFilter] = useState<Filter>('all')
   const open = projects.find((p) => p._id === openId) ?? null
+  const shown = useMemo(() => projects.filter((p) => matches(p, filter)), [projects, filter])
+  const counts = useMemo(
+    () => Object.fromEntries(FILTERS.map((f) => [f.id, projects.filter((p) => matches(p, f.id)).length])),
+    [projects],
+  )
 
   return (
     <section id="projects" className="section">
@@ -126,18 +184,48 @@ export function Projects() {
           <span className="eyebrow">Projets</span>
           <h2 className="section__title">Réalisations sélectionnées</h2>
           <p className="section__lead">
-            Chaque projet est géré depuis le CMS — il suffit d'y ajouter une entrée
-            pour qu'elle apparaisse ici et dans la scène 3D.
+            Plateformes web, applications mobiles et outils IA : {projects.length} projets
+            conçus de la maquette à la mise en production.
           </p>
         </Reveal>
 
-        <div className="pgrid">
-          {projects.map((p, i) => (
-            <Reveal key={p._id} delay={i * 0.06}>
-              <ProjectCard project={p} onOpen={() => setOpenId(p._id)} />
-            </Reveal>
+        <div className="pfilters" role="tablist" aria-label="Filtrer les projets">
+          {FILTERS.filter((f) => f.id === 'all' || counts[f.id] > 0).map((f) => (
+            <button
+              key={f.id}
+              role="tab"
+              aria-selected={filter === f.id}
+              className={`pfilter ${filter === f.id ? 'is-active' : ''}`}
+              onClick={() => setFilter(f.id)}
+            >
+              {filter === f.id && (
+                <motion.span layoutId="pfilter-bg" className="pfilter__bg" transition={{ type: 'spring', stiffness: 380, damping: 32 }} />
+              )}
+              <span className="pfilter__label">
+                {f.label} <small>{counts[f.id]}</small>
+              </span>
+            </button>
           ))}
         </div>
+
+        <motion.div className="pgrid" layout>
+          <AnimatePresence mode="popLayout">
+            {shown.map((p, i) => (
+              <motion.div
+                key={p._id}
+                layout
+                initial={{ opacity: 0, y: 40, rotateX: -14 }}
+                whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+                exit={{ opacity: 0, scale: 0.92 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.6, delay: (i % 3) * 0.07, ease: EASE }}
+                style={{ transformPerspective: 1000 }}
+              >
+                <ProjectCard project={p} onOpen={() => setOpenId(p._id)} />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
       </div>
 
       <AnimatePresence>

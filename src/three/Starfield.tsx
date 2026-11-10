@@ -2,6 +2,7 @@ import { useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { sceneColors } from './config'
+import { getScroll } from '@/lib/scroll'
 
 interface Props {
   count: number
@@ -11,6 +12,8 @@ interface Props {
 /** Champ d'étoiles enveloppant, rotation très lente + respiration. */
 export function Starfield({ count, reducedMotion }: Props) {
   const ref = useRef<THREE.Points>(null)
+  const warp = useRef(1)
+  const spin = useRef(0)
 
   const geometry = useMemo(() => {
     const positions = new Float32Array(count * 3)
@@ -19,7 +22,7 @@ export function Starfield({ count, reducedMotion }: Props) {
       sceneColors.light,
       sceneColors.accent,
       sceneColors.primary,
-      new THREE.Color('#ffffff'),
+      sceneColors.isLight ? sceneColors.mid : new THREE.Color('#ffffff'),
     ]
 
     for (let i = 0; i < count; i++) {
@@ -45,10 +48,16 @@ export function Starfield({ count, reducedMotion }: Props) {
 
   useFrame((state, delta) => {
     if (!ref.current || reducedMotion) return
-    ref.current.rotation.y += delta * 0.012
-    ref.current.rotation.x += delta * 0.004
+    const sc = getScroll()
+    // rotation liée à la progression du scroll + dérive lente
+    spin.current += delta * 0.012
+    ref.current.rotation.y = spin.current + sc.progress * Math.PI * 0.6
+    ref.current.rotation.x = spin.current * 0.33 - sc.progress * 0.4
+    // effet "hyperespace" : le champ s'étire en profondeur quand on défile vite
+    const v = Math.min(Math.abs(sc.velocity) * 0.035, 1.6)
+    warp.current = THREE.MathUtils.damp(warp.current, 1 + v, 5, Math.min(delta, 1 / 30))
     const s = 1 + Math.sin(state.clock.elapsedTime * 0.3) * 0.02
-    ref.current.scale.setScalar(s)
+    ref.current.scale.set(s, s / (1 + (warp.current - 1) * 0.3), s * warp.current)
   })
 
   return (
@@ -58,9 +67,9 @@ export function Starfield({ count, reducedMotion }: Props) {
         sizeAttenuation
         vertexColors
         transparent
-        opacity={0.9}
+        opacity={sceneColors.isLight ? 0.55 : 0.9}
         depthWrite={false}
-        blending={THREE.AdditiveBlending}
+        blending={sceneColors.isLight ? THREE.NormalBlending : THREE.AdditiveBlending}
       />
     </points>
   )

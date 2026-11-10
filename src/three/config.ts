@@ -37,7 +37,7 @@ export const CAMERA_PATH: CamKey[] = [
   { pos: new THREE.Vector3(0, 0.4, 5.6), target: new THREE.Vector3(0, 0.25, 0) },
 ]
 
-/** Palette par défaut (surchargée par les réglages CMS via setSceneColors). */
+/** Palette courante de la scène (mise à jour par le thème actif via setSceneColors). */
 export const sceneColors = {
   dark: new THREE.Color('#042c53'),
   mid: new THREE.Color('#0c447c'),
@@ -45,18 +45,26 @@ export const sceneColors = {
   accent: new THREE.Color('#378add'),
   light: new THREE.Color('#85b7eb'),
   bg: new THREE.Color('#030b18'),
+  isLight: false,
 }
 
-export function setSceneColors(theme: {
-  dark: string
-  mid: string
-  primary: string
-  accent: string
-  light: string
-}) {
-  sceneColors.dark.set(theme.dark)
-  sceneColors.mid.set(theme.mid)
-  sceneColors.primary.set(theme.primary)
-  sceneColors.accent.set(theme.accent)
-  sceneColors.light.set(theme.light)
+export function setSceneColors(
+  palette: { dark: string; mid: string; primary: string; accent: string; light: string },
+  bg: string,
+  isLight: boolean,
+) {
+  sceneColors.dark.set(palette.dark)
+  sceneColors.mid.set(palette.mid)
+  sceneColors.primary.set(palette.primary)
+  sceneColors.accent.set(palette.accent)
+  sceneColors.light.set(palette.light)
+  sceneColors.bg.set(bg)
+  sceneColors.isLight = isLight
 }
+
+/** Profondeur du travelling dans l'allée de projets (unités 3D). */
+export const ALLEY_DEPTH = 17
+/** Espacement entre deux monolithes. */
+export const MONOLITH_SPACING = 3.6
+/** Nombre max de monolithes dans l'allée. */
+export const MAX_MONOLITHS = 8

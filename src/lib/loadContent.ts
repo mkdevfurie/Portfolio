@@ -43,7 +43,9 @@ function normaliseProject(raw: Record<string, unknown>, index: number): Project 
     role: raw.role ? String(raw.role) : undefined,
     client: raw.client ? String(raw.client) : undefined,
     tags: Array.isArray(raw.tags) ? (raw.tags as string[]) : [],
-    cover: cleanImage(raw.cover),
+    cover:
+      cleanImage(raw.cover) ??
+      fallbackContent.projects.find((p) => p.slug === String(raw.slug ?? ''))?.cover,
     gallery: Array.isArray(raw.gallery)
       ? (raw.gallery as unknown[]).map(cleanImage).filter(Boolean) as ImageRef[]
       : undefined,
@@ -54,6 +56,23 @@ function normaliseProject(raw: Record<string, unknown>, index: number): Project 
     bgColor: String(raw.bgColor ?? fb.bgColor),
     nameColor: String(raw.nameColor ?? fb.nameColor),
   }
+}
+
+/**
+ * Projets du CMS + projets locaux pas encore saisis dans le CMS (comparaison par slug).
+ * Les entrées du CMS restent prioritaires.
+ */
+function mergeProjects(fromCms: Project[]): Project[] {
+  const slugs = new Set(fromCms.map((p) => p.slug))
+  const missing = fallbackContent.projects.filter((p) => !slugs.has(p.slug))
+  return [...fromCms, ...missing]
+}
+
+/** Entrées du CMS + entrées locales absentes du CMS (le CMS reste prioritaire). */
+function mergeByKey<T>(fromCms: T[], local: T[], key: (item: T) => string): T[] {
+  if (!fromCms.length) return local
+  const keys = new Set(fromCms.map(key))
+  return [...fromCms, ...local.filter((item) => !keys.has(key(item)))]
 }
 
 function normaliseSkill(raw: Record<string, unknown>, index: number): Skill {
@@ -103,12 +122,14 @@ export async function loadContent(): Promise<LoadResult> {
           ...((raw.settings as Record<string, unknown> | null)?.seo as object | undefined),
         },
       },
-      projects: rawProjects.length
-        ? (rawProjects as Record<string, unknown>[]).map(normaliseProject)
-        : fallbackContent.projects,
-      skills: rawSkills.length
-        ? (rawSkills as Record<string, unknown>[]).map(normaliseSkill)
-        : fallbackContent.skills,
+      projects: mergeProjects(
+        (rawProjects as Record<string, unknown>[]).map(normaliseProject),
+      ),
+      skills: mergeByKey(
+        (rawSkills as Record<string, unknown>[]).map(normaliseSkill),
+        fallbackContent.skills,
+        (s) => s.name.trim().toLowerCase(),
+      ),
       experience: Array.isArray(raw.experience) && raw.experience.length
         ? (raw.experience as PortfolioContent['experience'])
         : fallbackContent.experience,

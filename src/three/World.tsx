@@ -8,6 +8,8 @@ import { Starfield } from './Starfield'
 import { Crystal } from './Crystal'
 import { Monoliths } from './Monoliths'
 import { Effects } from './Effects'
+import { FloatingShapes } from './FloatingShapes'
+import { sceneColors } from './config'
 
 interface Props {
   projects: Project[]
@@ -21,6 +23,7 @@ export function World({ projects, quality }: Props) {
       <Stage quality={quality} />
       <Starfield count={quality.starCount} reducedMotion={quality.reducedMotion} />
       <Crystal reducedMotion={quality.reducedMotion} />
+      <FloatingShapes count={quality.isMobile ? 10 : 18} reducedMotion={quality.reducedMotion} />
 
       <Suspense fallback={null}>
         {projects.length > 0 && (
@@ -29,7 +32,7 @@ export function World({ projects, quality }: Props) {
         <Preload all />
       </Suspense>
 
-      {quality.postFx && <Effects />}
+      {quality.postFx && !sceneColors.isLight && <Effects />}
       <AdaptiveDpr pixelated />
     </>
   )

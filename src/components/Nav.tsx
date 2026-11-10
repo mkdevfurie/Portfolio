@@ -4,6 +4,7 @@ import { SECTIONS } from '@/three/config'
 import { currentSectionIndex, scrollToSection } from '@/lib/scroll'
 import { useSettings } from '@/content/hooks'
 import { EASE } from '@/lib/motion'
+import { ThemeSwitcher } from './ThemeSwitcher'
 
 export function Nav() {
   const settings = useSettings()
@@ -59,7 +60,9 @@ export function Nav() {
         ) : null}
       </nav>
 
-      <button
+      <div className="nav__actions">
+        <ThemeSwitcher />
+        <button
         className={`nav__burger ${open ? 'is-open' : ''}`}
         onClick={() => setOpen((v) => !v)}
         aria-label="Menu"
@@ -68,7 +71,8 @@ export function Nav() {
         <span />
         <span />
         <span />
-      </button>
+        </button>
+      </div>
     </motion.header>
   )
 }

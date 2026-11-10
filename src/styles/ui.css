@@ -34,7 +34,7 @@
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  border: 2px solid rgba(133, 183, 235, 0.15);
+  border: 2px solid color-mix(in srgb, var(--c-light) 15%, transparent);
   border-top-color: var(--c-accent);
   animation: spin 1s linear infinite;
 }
@@ -53,7 +53,7 @@
 .loader__bar {
   width: 180px;
   height: 2px;
-  background: rgba(133, 183, 235, 0.15);
+  background: color-mix(in srgb, var(--c-light) 15%, transparent);
   border-radius: 2px;
   overflow: hidden;
 }
@@ -80,7 +80,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 clamp(18px, 5vw, 60px);
-  background: linear-gradient(to bottom, rgba(3, 11, 24, 0.75), transparent);
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--bg) 75%, transparent), transparent);
   backdrop-filter: blur(8px);
 }
 .nav__brand {
@@ -159,7 +159,7 @@
     flex-direction: column;
     gap: 4px;
     padding: 20px clamp(18px, 5vw, 60px) 28px;
-    background: rgba(4, 15, 30, 0.96);
+    background: color-mix(in srgb, var(--bg) 96%, transparent);
     backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--panel-border);
     transform: translateY(-120%);
@@ -194,7 +194,7 @@
   padding: 7px 15px;
   border-radius: 999px;
   border: 1px solid var(--panel-border-strong);
-  background: rgba(133, 183, 235, 0.06);
+  background: color-mix(in srgb, var(--c-light) 6%, transparent);
   font-size: 0.8rem;
   color: var(--c-light);
   letter-spacing: 0.02em;
@@ -378,6 +378,9 @@
   gap: 22px;
 }
 .pcard {
+  position: relative;
+  height: 100%;
+  will-change: transform;
   border-radius: var(--radius);
   overflow: hidden;
   border: 1px solid var(--panel-border);
@@ -457,7 +460,7 @@
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: rgba(2, 9, 20, 0.72);
+  background: color-mix(in srgb, var(--bg) 72%, transparent);
   backdrop-filter: blur(6px);
 }
 .modal__panel {
@@ -480,7 +483,7 @@
   border-radius: 50%;
   font-size: 1.4rem;
   line-height: 1;
-  background: rgba(3, 11, 24, 0.6);
+  background: color-mix(in srgb, var(--bg) 60%, transparent);
   color: var(--text-bright);
 }
 .modal__cover {
@@ -557,7 +560,7 @@
   border-radius: 12px;
   display: grid;
   place-items: center;
-  background: rgba(133, 183, 235, 0.1);
+  background: color-mix(in srgb, var(--c-light) 10%, transparent);
   flex-shrink: 0;
 }
 .skill__icon img {
@@ -605,7 +608,7 @@
   height: 11px;
   border-radius: 50%;
   background: var(--c-accent);
-  box-shadow: 0 0 0 4px rgba(55, 138, 221, 0.15);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--c-accent) 15%, transparent);
 }
 .tl--edu .tl__node {
   background: var(--c-light);
@@ -701,7 +704,7 @@
   text-transform: none;
   letter-spacing: 0;
   color: var(--text-bright);
-  background: rgba(3, 11, 24, 0.5);
+  background: color-mix(in srgb, var(--bg) 50%, transparent);
   border: 1px solid var(--panel-border);
   border-radius: 12px;
   padding: 12px 14px;
@@ -712,7 +715,7 @@
 .cform textarea:focus {
   outline: none;
   border-color: var(--c-accent);
-  box-shadow: 0 0 0 3px rgba(55, 138, 221, 0.18);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-accent) 18%, transparent);
 }
 .cform button {
   margin-top: 4px;
@@ -766,4 +769,216 @@
   font-size: 0.76rem;
   color: var(--text-dim);
   margin-left: auto;
+}
+
+/* ============================================================
+   Thèmes — sélecteur, transitions, ajustements du thème clair
+   ============================================================ */
+body,
+.panel,
+.nav,
+.nav__links {
+  transition: background-color 0.5s var(--ease-out), color 0.5s var(--ease-out),
+    border-color 0.5s var(--ease-out);
+}
+
+.nav__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.theme-switch {
+  position: relative;
+}
+.theme-switch__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px 6px 7px;
+  border-radius: 999px;
+  border: 1px solid var(--panel-border-strong);
+  background: color-mix(in srgb, var(--c-light) 6%, transparent);
+  font-size: 0.8rem;
+  color: var(--text-bright);
+  transition: background 0.25s, transform 0.25s var(--ease-out);
+}
+.theme-switch__btn:hover {
+  background: color-mix(in srgb, var(--c-light) 14%, transparent);
+  transform: translateY(-1px);
+}
+.theme-switch__dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  box-shadow: 0 0 12px -2px var(--c-accent);
+}
+.theme-switch__menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  min-width: 190px;
+  list-style: none;
+  padding: 6px;
+  border-radius: 16px;
+  background: var(--panel-solid);
+  border: 1px solid var(--panel-border-strong);
+  box-shadow: var(--shadow-panel);
+  transform-origin: top right;
+  z-index: 60;
+}
+.theme-switch__item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 10px;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  color: var(--text);
+  text-align: left;
+}
+.theme-switch__item:hover {
+  background: color-mix(in srgb, var(--c-light) 10%, transparent);
+  color: var(--text-bright);
+}
+.theme-switch__item.is-active {
+  color: var(--text-bright);
+  background: color-mix(in srgb, var(--c-accent) 16%, transparent);
+}
+.theme-switch__swatch {
+  display: inline-flex;
+  gap: 3px;
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid var(--panel-border);
+}
+.theme-switch__swatch i {
+  width: 10px;
+  height: 14px;
+  border-radius: 3px;
+}
+
+@media (max-width: 860px) {
+  .theme-switch__label {
+    display: none;
+  }
+  .theme-switch__btn {
+    padding: 6px;
+  }
+}
+
+/* Barre de progression du scroll */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 70;
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--c-primary), var(--c-accent), var(--c-light));
+  box-shadow: 0 0 12px var(--c-accent);
+}
+
+/* Fond de secours sans WebGL */
+.scene-fallback {
+  background:
+    radial-gradient(60vmax 60vmax at 75% 30%, color-mix(in srgb, var(--c-primary) 45%, transparent), transparent 60%),
+    radial-gradient(50vmax 50vmax at 15% 80%, color-mix(in srgb, var(--c-accent) 25%, transparent), transparent 60%),
+    var(--bg);
+  animation: fallback-drift 18s ease-in-out infinite alternate;
+  background-size: 140% 140%;
+}
+@keyframes fallback-drift {
+  to {
+    background-position: 100% 60%;
+  }
+}
+
+/* Thème clair */
+[data-theme-mode='light'] .btn--primary {
+  color: #fff;
+}
+[data-theme-mode='light'] .status--livre {
+  color: #13834a;
+}
+[data-theme-mode='light'] .status--encours {
+  color: #a76a00;
+}
+[data-theme-mode='light'] .status--pause {
+  color: #7a3fb0;
+}
+[data-theme-mode='light'] .nav__links {
+  background: color-mix(in srgb, var(--bg) 96%, transparent);
+}
+
+/* ---- Projets : reflet 3D + filtres ---- */
+.pcard__glare {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.35s var(--ease-out);
+  background: radial-gradient(
+    circle at var(--gx, 50%) var(--gy, 50%),
+    color-mix(in srgb, var(--c-pale) 28%, transparent),
+    transparent 55%
+  );
+  mix-blend-mode: soft-light;
+}
+.pcard:hover .pcard__glare,
+.pcard:focus-visible .pcard__glare {
+  opacity: 1;
+}
+.pcard:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 3px;
+}
+.pcard__media img {
+  transition: transform 0.8s var(--ease-out);
+}
+.pcard:hover .pcard__media img {
+  transform: scale(1.06);
+}
+
+.pfilters {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 4px;
+  margin: 28px 0 6px;
+  border-radius: 999px;
+  border: 1px solid var(--panel-border);
+  background: var(--panel);
+  backdrop-filter: blur(10px);
+}
+.pfilter {
+  position: relative;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 0.84rem;
+  color: var(--text-dim);
+  transition: color 0.25s;
+}
+.pfilter:hover,
+.pfilter.is-active {
+  color: var(--text-bright);
+}
+.pfilter__bg {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: color-mix(in srgb, var(--c-accent) 24%, transparent);
+  border: 1px solid color-mix(in srgb, var(--c-accent) 45%, transparent);
+}
+.pfilter__label {
+  position: relative;
+}
+.pfilter small {
+  margin-left: 4px;
+  font-size: 0.72em;
+  opacity: 0.7;
 }

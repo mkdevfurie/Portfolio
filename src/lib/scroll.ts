@@ -4,8 +4,53 @@ import { SECTIONS } from '@/three/config'
 let lenis: Lenis | null = null
 let rafId = 0
 
-/** Progression globale du scroll, 0 (haut) → 1 (bas). Lue chaque frame par la 3D. */
-const state = { progress: 0, velocity: 0 }
+/**
+ * État du scroll, lu chaque frame par la 3D.
+ * - progress : progression globale 0 (haut) → 1 (bas)
+ * - velocity : vitesse instantanée (Lenis)
+ * - section  : position continue dans les sections, 0 → SECTIONS.length - 1
+ *              (entier = milieu de la section, x.5 = passage à la suivante)
+ * - local    : progression 0 → 1 à l'intérieur de chaque section (par id)
+ */
+const state = {
+  progress: 0,
+  velocity: 0,
+  section: 0,
+  local: Object.fromEntries(SECTIONS.map((s) => [s.id, 0])) as Record<string, number>,
+}
+
+let bounds: { top: number; height: number }[] = []
+let resizeObs: ResizeObserver | null = null
+
+function measureSections() {
+  bounds = SECTIONS.map((s) => {
+    const el = document.getElementById(s.id)
+    if (!el) return { top: 0, height: 1 }
+    const r = el.getBoundingClientRect()
+    return { top: r.top + window.scrollY, height: Math.max(1, r.height) }
+  })
+  updateSections(window.scrollY)
+}
+
+function updateSections(scrollY: number) {
+  if (!bounds.length) return
+  const vh = window.innerHeight
+  const center = scrollY + vh / 2
+  const last = SECTIONS.length - 1
+
+  SECTIONS.forEach((s, i) => {
+    const b = bounds[i]
+    // 0 quand le haut de la section atteint le bas de l'écran, 1 quand son bas quitte le haut
+    const t = (scrollY + vh - b.top) / (b.height + vh)
+    state.local[s.id] = Math.min(1, Math.max(0, t))
+  })
+
+  let idx = 0
+  for (let i = 0; i <= last; i++) if (bounds[i].top <= center) idx = i
+  const b = bounds[idx]
+  const within = (center - b.top) / b.height
+  state.section = Math.min(last, Math.max(0, idx + within - 0.5))
+}
 
 const prefersReduced =
   typeof window !== 'undefined' &&
@@ -25,7 +70,17 @@ export function initScroll() {
   lenis.on('scroll', (inst: Lenis) => {
     state.progress = Number.isFinite(inst.progress) ? inst.progress : 0
     state.velocity = inst.velocity
+    updateSections(inst.scroll)
   })
+
+  measureSections()
+  window.addEventListener('resize', measureSections)
+  window.addEventListener('load', measureSections)
+  const main = document.querySelector('.scroll-dom')
+  if (main && 'ResizeObserver' in window) {
+    resizeObs = new ResizeObserver(() => measureSections())
+    resizeObs.observe(main)
+  }
 
   const raf = (time: number) => {
     lenis?.raf(time)
@@ -36,6 +91,10 @@ export function initScroll() {
 
 export function destroyScroll() {
   cancelAnimationFrame(rafId)
+  window.removeEventListener('resize', measureSections)
+  window.removeEventListener('load', measureSections)
+  resizeObs?.disconnect()
+  resizeObs = null
   lenis?.destroy()
   lenis = null
 }
