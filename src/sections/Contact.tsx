@@ -4,11 +4,14 @@ import { useSettings } from '@/content/hooks'
 import { ScrambleText } from '@/components/ScrambleText'
 import { LocalTime } from '@/components/LocalTime'
 import { copyText } from '@/lib/toast'
+import { openPanel } from '@/components/Overlay'
+import { useT } from '@/i18n'
 
 type Status = 'idle' | 'sending' | 'ok' | 'error'
 
 export function Contact() {
   const s = useSettings()
+  const t = useT()
   const [status, setStatus] = useState<Status>('idle')
   const [form, setForm] = useState({ name: '', email: '', message: '' })
 
@@ -54,12 +57,28 @@ export function Contact() {
         <div className="contact__grid">
           <div className="contact__lede">
             <Reveal>
-              <span className="eyebrow"><ScrambleText text="Contact" /></span>
-              <h2 className="section__title">Un projet en tête ?</h2>
+              <span className="eyebrow"><ScrambleText text={t('Contact')} /></span>
+              <h2 className="section__title">{t('Un projet en tête ?')}</h2>
               <p className="section__lead">
-                Parlons-en. Réponse sous 24–48 h.
+                {t('Parlons-en. Réponse sous 24–48 h.')}
               </p>
               <LocalTime />
+              <div className="contact__quick">
+                <button className="quick" onClick={() => openPanel('booking')}>
+                  <span className="quick__icon">📅</span>
+                  <span>
+                    <strong>{t('Réserver un appel')}</strong>
+                    <em>{t('15–30 min, gratuit')}</em>
+                  </span>
+                </button>
+                <button className="quick" onClick={() => openPanel('estimator')}>
+                  <span className="quick__icon">🧮</span>
+                  <span>
+                    <strong>{t('Estimer mon projet')}</strong>
+                    <em>{t('Fourchette en 1 minute')}</em>
+                  </span>
+                </button>
+              </div>
             </Reveal>
 
             <Reveal delay={0.1}>
@@ -72,9 +91,9 @@ export function Contact() {
                   <button
                     type="button"
                     className="contact__copy"
-                    onClick={() => copyText(s.email, 'Email copié dans le presse-papiers')}
-                    aria-label="Copier l'adresse email"
-                    title="Copier"
+                    onClick={() => copyText(s.email, t('Email copié dans le presse-papiers'))}
+                    aria-label={t('Copier l’adresse email')}
+                    title={t('Copier')}
                   >
                     <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden>
                       <rect x="8" y="8" width="12" height="12" rx="2.5" fill="none" stroke="currentColor" strokeWidth="1.8" />
@@ -85,7 +104,7 @@ export function Contact() {
                 {whatsappHref && (
                   <a href={whatsappHref} target="_blank" rel="noreferrer" className="contact__line">
                     <span>WhatsApp</span>
-                    Discuter maintenant
+                    {t('Discuter maintenant')}
                   </a>
                 )}
               </div>
@@ -109,12 +128,12 @@ export function Contact() {
           <Reveal delay={0.12} className="contact__formwrap">
             <form className="cform panel" onSubmit={handleSubmit}>
               <label>
-                Nom
+                {t('Nom')}
                 <input
                   required
                   value={form.name}
                   onChange={update('name')}
-                  placeholder="Votre nom"
+                  placeholder={t('Votre nom')}
                 />
               </label>
               <label>
@@ -124,28 +143,28 @@ export function Contact() {
                   type="email"
                   value={form.email}
                   onChange={update('email')}
-                  placeholder="vous@exemple.com"
+                  placeholder={t('vous@exemple.com')}
                 />
               </label>
               <label>
-                Message
+                {t('Message')}
                 <textarea
                   required
                   rows={4}
                   value={form.message}
                   onChange={update('message')}
-                  placeholder="Décrivez votre besoin…"
+                  placeholder={t('Décrivez votre besoin…')}
                 />
               </label>
 
               <button className="btn btn--primary" disabled={status === 'sending'}>
-                {status === 'sending' ? 'Envoi…' : 'Envoyer le message'}
+                {status === 'sending' ? t('Envoi…') : t('Envoyer le message')}
               </button>
 
-              {status === 'ok' && <p className="cform__msg cform__msg--ok">Message envoyé, merci !</p>}
+              {status === 'ok' && <p className="cform__msg cform__msg--ok">{t('Message envoyé, merci !')}</p>}
               {status === 'error' && (
                 <p className="cform__msg cform__msg--err">
-                  Envoi impossible. Écrivez-moi directement à {s.email}.
+                  {t('Envoi impossible. Écrivez-moi directement à {email}.', { email: s.email })}
                 </p>
               )}
             </form>

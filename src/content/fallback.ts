@@ -32,10 +32,12 @@ export const fallbackContent: PortfolioContent = {
     whatsapp: '22896558081',
     web3formsKey: '35da6fc1-104a-463b-8305-db47886b934c',
     cvUrl: '',
+    calUrl: '',
+    githubUser: 'mkdevfurie',
     year: '2026',
     socials: {
       linkedin: 'https://linkedin.com/in/kpemoua',
-      github: 'https://github.com/Mamfurie',
+      github: 'https://github.com/mkdevfurie',
       twitter: 'https://twitter.com/kpemoua',
     },
     stats: [
@@ -177,6 +179,7 @@ export const fallbackContent: PortfolioContent = {
       order: 5,
       bgColor: '#185FA5',
       nameColor: '#E6F1FB',
+      location: { label: 'Cayenne, Guyane', lat: 4.92, lon: -52.33 },
     },
     {
       _id: 'p-edaoba',
@@ -376,5 +379,52 @@ export const fallbackContent: PortfolioContent = {
     { _id: 'sv-mobile', title: 'Développement mobile', subtitle: 'React Native · Flutter · iOS · Android', emoji: '📱', accent: '#185FA5', order: 1 },
     { _id: 'sv-api', title: 'APIs & back-end', subtitle: 'NestJS · Node.js · PostgreSQL · Firebase', emoji: '⚙️', accent: '#3B6D11', order: 2 },
     { _id: 'sv-design', title: 'UI/UX & design', subtitle: 'Figma · Prototypage · Design system', emoji: '🎨', accent: '#0F6E56', order: 3 },
+  ],
+
+  /** Témoignages : à remplir avec de vrais avis clients (la section reste masquée tant que la liste est vide). */
+  testimonials: [],
+
+  /**
+   * Articles de blog — BROUILLONS tirés des projets réels, à relire/réécrire
+   * avant publication (ou à remplacer par des articles saisis dans Sanity).
+   */
+  posts: [
+    {
+      _id: 'post-offline-scan',
+      title: 'Scanner des badges QR sans réseau : retour sur le Forum des Leaders',
+      slug: 'scan-qr-hors-ligne-flutter',
+      excerpt:
+        "Comment l'application Flutter des agents contrôle les accès même quand le réseau tombe, puis se synchronise.",
+      date: '2026-10-31',
+      tags: ['Flutter', 'Offline-first', 'NestJS'],
+      body: [
+        "Lors d'un grand événement, le réseau mobile sature vite : des centaines de téléphones sur la même antenne. Pour le contrôle d'accès du Forum Panafricain des Leaders, l'application des agents ne pouvait donc pas dépendre d'une connexion.",
+        '## Le principe : vérifier localement, synchroniser ensuite',
+        "Avant l'ouverture, chaque téléphone télécharge la liste des participants. Le QR code d'un badge contient un identifiant signé : l'application vérifie la signature et la présence du participant sans appeler le serveur.",
+        "Chaque scan est enregistré dans une file locale. Dès que le réseau revient, la file est envoyée à l'API NestJS, qui fusionne les passages et ignore les doublons.",
+        '## Ce que je referais pareil',
+        "Penser hors ligne dès le départ plutôt que l'ajouter après coup. Et afficher clairement l'état de synchronisation à l'agent : un petit compteur « 12 scans en attente » rassure plus qu'un long discours.",
+      ],
+    },
+    {
+      _id: 'post-3d-portfolio',
+      title: 'Un portfolio en 3D qui reste rapide : mes choix techniques',
+      slug: 'portfolio-3d-rapide',
+      excerpt:
+        'React Three Fiber, chargement différé, thèmes dynamiques : comment ce site garde une 3D fluide sans sacrifier le mobile.',
+      date: '2026-11-12',
+      tags: ['React', 'Three.js', 'Performance'],
+      body: [
+        "Ce portfolio affiche un globe terrestre, un champ d'étoiles et une caméra qui suit le défilement. Le défi : que tout cela reste fluide sur un téléphone d'entrée de gamme avec une connexion 3G.",
+        '## Le texte d\'abord, la 3D ensuite',
+        "Le contenu HTML s'affiche immédiatement ; la scène 3D est chargée en différé, puis s'allège automatiquement sur les petits écrans (moins d'étoiles, résolution plafonnée).",
+        '## Une seule source de couleurs',
+        "Les thèmes reposent sur des variables CSS lues aussi par la scène 3D : changer de thème recolore à la fois l'interface, le globe et même l'icône de l'onglet.",
+        '```',
+        "root.style.setProperty('--c-accent', palette.accent)",
+        '```',
+        "Résultat : une seule palette à maintenir, et cinq ambiances pour le prix d'une.",
+      ],
+    },
   ],
 }

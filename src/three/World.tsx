@@ -23,7 +23,7 @@ export function World({ projects, quality }: Props) {
       <Stage quality={quality} />
       <Starfield count={quality.starCount} reducedMotion={quality.reducedMotion} />
       <Suspense fallback={null}>
-        <Globe reducedMotion={quality.reducedMotion} />
+        <Globe reducedMotion={quality.reducedMotion} projects={projects} />
       </Suspense>
       <FloatingShapes count={quality.isMobile ? 10 : 18} reducedMotion={quality.reducedMotion} />
 

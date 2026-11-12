@@ -3,6 +3,10 @@ import { AnimatePresence, motion } from 'motion/react'
 import { useExperience, useProjects, useServices, useSettings, useSkills } from '@/content/hooks'
 import { useTheme } from '@/theme/ThemeProvider'
 import { isTyping } from '@/lib/toast'
+import { useT } from '@/i18n'
+import { unlock } from '@/lib/achievements'
+import { TermSnake, snakeState } from '@/games/TermSnake'
+import { usePosts } from '@/content/hooks'
 import { EASE } from '@/lib/motion'
 import { ASCII_LOGO, Cmd, complete, Dim, Err, findCommand, Hl, Ok, type TermCtx } from '@/terminal/commands'
 
@@ -45,6 +49,8 @@ export function Terminal() {
   const skills = useSkills()
   const experience = useExperience()
   const services = useServices()
+  const posts = usePosts()
+  const t = useT()
   const { theme, setTheme } = useTheme()
 
   const [open, setOpen] = useState(false)
@@ -115,6 +121,7 @@ export function Terminal() {
             /* stockage indisponible */
           }
         setGame(null)
+        if (tries <= 7) unlock('guesser')
         print(
           <>
             <Ok>
@@ -159,8 +166,26 @@ export function Terminal() {
         window.setTimeout(() => setMatrixOn(false), 5000)
       },
       startGame,
+      startSnake: () => (
+        <TermSnake
+          onEnd={(score, record) => {
+            print(
+              <>
+                <Ok>
+                  🐍 Partie terminée — score {score}
+                  {record ? ' · 🏆 nouveau record !' : ''}
+                </Ok>{' '}
+                <Cmd c="snake" />
+              </>,
+            )
+            requestAnimationFrame(() => input.current?.focus())
+          }}
+        />
+      ),
+      posts,
+      t,
     }),
-    [settings, projects, skills, experience, services, theme.id, setTheme, history, close, startGame],
+    [settings, projects, skills, experience, services, theme.id, setTheme, history, close, startGame, print, posts, t],
   )
 
   /* ---------- exécution ---------- */
@@ -182,7 +207,7 @@ export function Terminal() {
       if (!cmd) {
         print(
           <Err>
-            {name} : commande introuvable. Tapez <Cmd c="aide" />
+            {name} : {t('commande introuvable. Tapez')} <Cmd c="aide" />
           </Err>,
         )
         return
@@ -190,7 +215,7 @@ export function Terminal() {
       const out = cmd.run(args, ctx)
       if (out !== undefined && out !== null) print(out)
     },
-    [ctx, game, playGuess, print, prompt],
+    [ctx, game, playGuess, print, prompt, t],
   )
 
   /* ---------- message d'accueil ---------- */
@@ -201,19 +226,19 @@ export function Terminal() {
       <div className="t-boot">
         <pre className="t-ascii">{ASCII_LOGO}</pre>
         <div>
-          Bienvenue dans le terminal de{' '}
+          {t('Bienvenue dans le terminal de')}{' '}
           <Hl>
             {settings.firstName} {settings.lastName}
           </Hl>{' '}
           <Dim>(mkd-sh 1.0)</Dim>
         </div>
         <div>
-          Tapez <Cmd c="aide" /> pour commencer, ou essayez <Cmd c="whoami" /> <Cmd c="projets" />{' '}
-          <Cmd c="neofetch" /> <Cmd c="jeu" />
+          {t('Tapez')} <Cmd c="aide" /> {t('pour commencer, ou essayez')} <Cmd c="whoami" /> <Cmd c="projets" />{' '}
+          <Cmd c="neofetch" /> <Cmd c="snake" /> <Cmd c="arcade" />
         </div>
       </div>,
     )
-  }, [open, print, settings])
+  }, [open, print, settings, t])
 
   /* ---------- raccourcis globaux ---------- */
   useEffect(() => {
@@ -234,7 +259,9 @@ export function Terminal() {
   }, [])
 
   useEffect(() => {
-    if (open) requestAnimationFrame(() => input.current?.focus())
+    if (!open) return
+    unlock('terminal')
+    requestAnimationFrame(() => input.current?.focus())
   }, [open])
 
   useEffect(() => {
@@ -243,6 +270,10 @@ export function Terminal() {
 
   /* ---------- saisie ---------- */
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (snakeState.running) {
+      e.preventDefault()
+      return
+    }
     if (e.key === 'Enter') {
       exec(value)
     } else if (e.key === 'Tab') {
@@ -337,7 +368,7 @@ export function Terminal() {
             className={`term ${max ? 'is-max' : ''}`}
             role="dialog"
             aria-modal="true"
-            aria-label="Terminal interactif"
+            aria-label={t('Terminal interactif')}
             style={max ? undefined : { translate: `${offset.x}px ${offset.y}px` }}
             initial={{ opacity: 0, y: 30, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -352,12 +383,12 @@ export function Terminal() {
               onDoubleClick={() => setMax((v) => !v)}
             >
               <div className="term__dots">
-                <button className="is-close" onClick={close} aria-label="Fermer le terminal" />
-                <button className="is-min" onClick={close} aria-label="Réduire le terminal" />
+                <button className="is-close" onClick={close} aria-label={t('Fermer le terminal')} />
+                <button className="is-min" onClick={close} aria-label={t('Réduire le terminal')} />
                 <button
                   className="is-max"
                   onClick={() => setMax((v) => !v)}
-                  aria-label={max ? 'Restaurer la taille' : 'Agrandir le terminal'}
+                  aria-label={max ? t('Restaurer la taille') : t('Agrandir le terminal')}
                 />
               </div>
               <span className="term__title">
@@ -394,7 +425,7 @@ export function Terminal() {
                   autoCorrect="off"
                   spellCheck={false}
                   enterKeyHint="send"
-                  aria-label="Commande"
+                  aria-label={t('Commande')}
                 />
               </div>
             </div>

@@ -69,6 +69,9 @@ function SceneCanvas() {
         zIndex: 0,
         pointerEvents: 'none',
       }}
+      // la page reste cliquable : la scène écoute le pointeur via la racine du document
+      eventSource={document.getElementById('root') ?? undefined}
+      eventPrefix="client"
       dpr={quality.dpr}
       gl={{
         antialias: false,

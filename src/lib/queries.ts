@@ -13,6 +13,7 @@ export const contentQuery = groq`{
     firstName, lastName, initials, title, tagline, bio1, bio2,
     email, whatsapp, web3formsKey, year,
     "cvUrl": cv.asset->url,
+    calUrl, githubUser,
     socials,
     stats,
     theme,
@@ -25,7 +26,7 @@ export const contentQuery = groq`{
     "cover": cover{ ${imageFields} },
     "gallery": gallery[]{ ${imageFields} },
     liveUrl, repoUrl, featured, order,
-    bgColor, nameColor
+    bgColor, nameColor, challenge, results, location
   },
 
   "skills": *[_type == "skill"] | order(order asc, name asc){
@@ -39,5 +40,14 @@ export const contentQuery = groq`{
 
   "services": *[_type == "service"] | order(order asc){
     _id, title, subtitle, emoji, accent, order
+  },
+
+  "testimonials": *[_type == "testimonial"] | order(order asc){
+    _id, name, role, company, quote, order,
+    "avatar": avatar{ ${imageFields} }
+  },
+
+  "posts": *[_type == "post" && defined(slug.current)] | order(date desc){
+    _id, title, "slug": slug.current, excerpt, date, tags, body
   }
 }`

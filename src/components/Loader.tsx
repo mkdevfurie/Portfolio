@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { onSceneReady } from '@/lib/sceneReady'
 import { Logo } from './Logo'
+import { useT } from '@/i18n'
 
 const MIN_MS = 900
 const HARD_CAP_MS = 3500
@@ -8,6 +9,7 @@ const FADE_MS = 600
 
 export function Loader() {
   const [gone, setGone] = useState(false)
+  const t = useT()
   const [leaving, setLeaving] = useState(false)
   const [pct, setPct] = useState(8)
   const mounted = useRef(performance.now())
@@ -46,7 +48,7 @@ export function Loader() {
         <Logo size={64} draw />
       </div>
       <p className="loader__label">
-        Construction de l'espace… <span className="loader__pct">{Math.round(pct)}%</span>
+        {t('Construction de l’espace…')} <span className="loader__pct">{Math.round(pct)}%</span>
       </p>
       <div className="loader__bar">
         <span className="loader__fill" style={{ width: `${pct}%` }} />

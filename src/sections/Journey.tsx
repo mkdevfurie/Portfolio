@@ -1,16 +1,19 @@
 import { Reveal } from '@/components/Reveal'
 import { useExperience } from '@/content/hooks'
 import { ScrambleText } from '@/components/ScrambleText'
+import { Blog } from '@/components/Blog'
+import { useT } from '@/i18n'
 
 export function Journey() {
   const entries = useExperience()
+  const t = useT()
 
   return (
     <section id="journey" className="section">
       <div className="section__inner">
         <Reveal>
-          <span className="eyebrow"><ScrambleText text="Parcours" /></span>
-          <h2 className="section__title">Expérience & formation</h2>
+          <span className="eyebrow"><ScrambleText text={t('Parcours')} /></span>
+          <h2 className="section__title">{t('Expérience & formation')}</h2>
         </Reveal>
 
         <div className="timeline">
@@ -28,6 +31,8 @@ export function Journey() {
             </Reveal>
           ))}
         </div>
+
+        <Blog />
       </div>
     </section>
   )

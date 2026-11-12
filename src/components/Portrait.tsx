@@ -1,6 +1,7 @@
 import { useRef, type PointerEvent } from 'react'
 import { ME } from '@/content/me'
 import { Logo } from './Logo'
+import { useT } from '@/i18n'
 
 interface Props {
   name: string
@@ -10,6 +11,7 @@ interface Props {
 /** Carte portrait inclinable (effet 3D au survol) avec reflet et badges. */
 export function Portrait({ name, role }: Props) {
   const card = useRef<HTMLDivElement>(null)
+  const t = useT()
 
   const onMove = (e: PointerEvent<HTMLDivElement>) => {
     if (e.pointerType !== 'mouse') return
@@ -34,16 +36,16 @@ export function Portrait({ name, role }: Props) {
         <span className="portrait__bg" aria-hidden>
           <Logo size={120} dot={false} className="portrait__mark" />
         </span>
-        <img src={ME.portrait} alt={ME.alt} width={640} height={800} loading="lazy" decoding="async" />
+        <img src={ME.portrait} alt={t(ME.alt)} width={640} height={800} loading="lazy" decoding="async" />
         <span className="portrait__glare" aria-hidden />
         <figcaption className="portrait__caption">
           <strong>{name}</strong>
           <span>{role}</span>
         </figcaption>
       </div>
-      <span className="portrait__badge portrait__badge--loc">📍 Lomé, Togo</span>
+      <span className="portrait__badge portrait__badge--loc">📍 {t('Lomé, Togo')}</span>
       <span className="portrait__badge portrait__badge--status">
-        <i /> Disponible
+        <i /> {t('Disponible')}
       </span>
     </figure>
   )

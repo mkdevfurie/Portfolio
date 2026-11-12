@@ -3,10 +3,12 @@ import { AnimatePresence, motion } from 'motion/react'
 import { THEMES } from '@/theme/themes'
 import { useTheme } from '@/theme/ThemeProvider'
 import { EASE } from '@/lib/motion'
+import { useT } from '@/i18n'
 
 /** Bouton + menu déroulant pour changer de thème (couleurs du site et de la 3D). */
 export function ThemeSwitcher() {
   const { theme, setTheme } = useTheme()
+  const t = useT()
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -31,14 +33,14 @@ export function ThemeSwitcher() {
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="menu"
         aria-expanded={open}
-        aria-label={`Thème : ${theme.label}. Changer de thème`}
-        title="Changer de thème"
+        aria-label={`${t('Thème')} : ${t(theme.label)}. ${t('Changer de thème')}`}
+        title={t('Changer de thème')}
       >
         <span
           className="theme-switch__dot"
           style={{ background: `linear-gradient(135deg, ${theme.palette.accent}, ${theme.palette.primary})` }}
         />
-        <span className="theme-switch__label">{theme.label}</span>
+        <span className="theme-switch__label">{t(theme.label)}</span>
       </button>
 
       <AnimatePresence>
@@ -51,23 +53,23 @@ export function ThemeSwitcher() {
             exit={{ opacity: 0, y: -6, scale: 0.97 }}
             transition={{ duration: 0.22, ease: EASE }}
           >
-            {THEMES.map((t) => (
-              <li key={t.id}>
+            {THEMES.map((th) => (
+              <li key={th.id}>
                 <button
                   role="menuitemradio"
-                  aria-checked={t.id === theme.id}
-                  className={`theme-switch__item ${t.id === theme.id ? 'is-active' : ''}`}
+                  aria-checked={th.id === theme.id}
+                  className={`theme-switch__item ${th.id === theme.id ? 'is-active' : ''}`}
                   onClick={() => {
-                    setTheme(t.id)
+                    setTheme(th.id)
                     setOpen(false)
                   }}
                 >
-                  <span className="theme-switch__swatch" style={{ background: t.ui.bg }}>
-                    <i style={{ background: t.palette.primary }} />
-                    <i style={{ background: t.palette.accent }} />
-                    <i style={{ background: t.palette.light }} />
+                  <span className="theme-switch__swatch" style={{ background: th.ui.bg }}>
+                    <i style={{ background: th.palette.primary }} />
+                    <i style={{ background: th.palette.accent }} />
+                    <i style={{ background: th.palette.light }} />
                   </span>
-                  {t.label}
+                  {t(th.label)}
                 </button>
               </li>
             ))}

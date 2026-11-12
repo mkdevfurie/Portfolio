@@ -40,3 +40,16 @@ export function useServices() {
     [content.services],
   )
 }
+
+export function useTestimonials() {
+  const { content } = useContent()
+  return useMemo(
+    () => [...content.testimonials].sort((a, b) => a.order - b.order),
+    [content.testimonials],
+  )
+}
+
+export function usePosts() {
+  const { content } = useContent()
+  return useMemo(() => [...content.posts].sort((a, b) => b.date.localeCompare(a.date)), [content.posts])
+}

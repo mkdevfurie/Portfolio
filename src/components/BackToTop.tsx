@@ -1,6 +1,7 @@
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'motion/react'
 import { useState } from 'react'
 import { scrollToSection } from '@/lib/scroll'
+import { useT } from '@/i18n'
 
 const R = 20
 const C = 2 * Math.PI * R
@@ -8,6 +9,7 @@ const C = 2 * Math.PI * R
 /** Bouton « retour en haut » avec anneau de progression du défilement. */
 export function BackToTop() {
   const { scrollYProgress } = useScroll()
+  const t = useT()
   const [p, setP] = useState(0)
   useMotionValueEvent(scrollYProgress, 'change', setP)
   const show = p > 0.12
@@ -18,8 +20,8 @@ export function BackToTop() {
         <motion.button
           className="to-top"
           onClick={() => scrollToSection('hero')}
-          aria-label="Retour en haut"
-          title="Retour en haut"
+          aria-label={t('Retour en haut')}
+          title={t('Retour en haut')}
           initial={{ opacity: 0, scale: 0.6 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.6 }}

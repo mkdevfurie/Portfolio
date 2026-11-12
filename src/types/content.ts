@@ -18,6 +18,13 @@ export interface ImageRef {
   dominant?: string
 }
 
+/** Point géographique (épingles sur le globe). */
+export interface GeoPoint {
+  label: string
+  lat: number
+  lon: number
+}
+
 export interface Project {
   _id: string
   title: string
@@ -42,6 +49,33 @@ export interface Project {
   /** Couleurs de la vignette / de l'ilot 3D. */
   bgColor: string
   nameColor: string
+  /** Étude de cas (optionnel) : enjeu, résultats mesurés. */
+  challenge?: string
+  results?: string[]
+  /** Lieu du projet (épingle sur le globe) — Lomé par défaut. */
+  location?: GeoPoint
+}
+
+export interface Testimonial {
+  _id: string
+  name: string
+  role: string
+  company?: string
+  quote: string
+  avatar?: ImageRef
+  order: number
+}
+
+export interface Post {
+  _id: string
+  title: string
+  slug: string
+  excerpt: string
+  /** date ISO (AAAA-MM-JJ) */
+  date: string
+  tags: string[]
+  /** paragraphes ; une ligne commençant par « ## » devient un intertitre, « ``` » un bloc de code */
+  body: string[]
 }
 
 export interface Skill {
@@ -98,6 +132,10 @@ export interface SiteSettings {
   /** Cle d'acces Web3Forms pour le formulaire de contact. */
   web3formsKey?: string
   cvUrl?: string
+  /** Lien de réservation Cal.com (ex. https://cal.com/pseudo/30min). Vide = WhatsApp/email. */
+  calUrl?: string
+  /** Pseudo GitHub pour les statistiques en direct. */
+  githubUser?: string
   year: string
   socials: SocialLinks
   stats: Stat[]
@@ -123,6 +161,8 @@ export interface PortfolioContent {
   skills: Skill[]
   experience: ExperienceEntry[]
   services: Service[]
+  testimonials: Testimonial[]
+  posts: Post[]
 }
 
 export type ContentSource = 'sanity' | 'fallback'

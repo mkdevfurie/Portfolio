@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useLayoutEffect, useMemo, useState, type ReactNode } from 'react'
 import { useSettings } from '@/content/hooks'
 import { faviconDataUrl } from './favicon'
+import { trackSet } from '@/lib/achievements'
 import { DEFAULT_THEME, getTheme, type Theme, type ThemeId } from './themes'
 
 const STORAGE_KEY = 'portfolio-theme'
@@ -63,6 +64,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }, [theme])
 
   useEffect(() => {
+    trackSet('themes', id, 5, 'chameleon')
     try {
       localStorage.setItem(STORAGE_KEY, id)
     } catch {

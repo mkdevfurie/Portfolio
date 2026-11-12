@@ -84,6 +84,31 @@ export const project = defineType({
         }),
       ],
     }),
+    defineField({
+      name: 'challenge',
+      title: 'Étude de cas — enjeu',
+      type: 'text',
+      rows: 3,
+      description: 'Le problème du client, en 2–3 phrases.',
+    }),
+    defineField({
+      name: 'results',
+      title: 'Étude de cas — résultats',
+      type: 'array',
+      of: [defineArrayMember({ type: 'string' })],
+      description: 'Résultats concrets et vérifiables (ex. « 1 200 badges scannés en 3 jours »).',
+    }),
+    defineField({
+      name: 'location',
+      title: 'Lieu (épingle sur le globe)',
+      type: 'object',
+      description: 'Laisser vide = Lomé.',
+      fields: [
+        defineField({ name: 'label', title: 'Ville / pays', type: 'string' }),
+        defineField({ name: 'lat', title: 'Latitude', type: 'number' }),
+        defineField({ name: 'lon', title: 'Longitude', type: 'number' }),
+      ],
+    }),
     defineField({ name: 'liveUrl', title: 'Lien en ligne', type: 'url' }),
     defineField({ name: 'repoUrl', title: 'Lien du code', type: 'url' }),
     defineField({

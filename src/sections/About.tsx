@@ -2,9 +2,12 @@ import { Reveal } from '@/components/Reveal'
 import { useServices, useSettings } from '@/content/hooks'
 import { ScrambleText } from '@/components/ScrambleText'
 import { Portrait } from '@/components/Portrait'
+import { openPanel } from '@/components/Overlay'
+import { useT } from '@/i18n'
 
 export function About() {
   const s = useSettings()
+  const t = useT()
   const services = useServices()
 
   return (
@@ -13,14 +16,14 @@ export function About() {
         <div className="about__grid">
           <div className="about__intro">
             <Reveal>
-              <span className="eyebrow"><ScrambleText text="À propos" /></span>
+              <span className="eyebrow"><ScrambleText text={t('À propos')} /></span>
               <h2 className="section__title">
-                Je transforme des besoins métier en produits fiables.
+                {t('Je transforme des besoins métier en produits fiables.')}
               </h2>
             </Reveal>
             <div className="about__bio">
               <Reveal delay={0.06} className="about__photo">
-                <Portrait name={`${s.firstName} ${s.lastName}`} role="Développeur web & mobile" />
+                <Portrait name={`${s.firstName} ${s.lastName}`} role={t('Développeur web & mobile')} />
               </Reveal>
               <div>
                 <Reveal delay={0.08}>
@@ -28,6 +31,11 @@ export function About() {
                 </Reveal>
                 <Reveal delay={0.16}>
                   <p className="about__p about__p--dim">{s.bio2}</p>
+                </Reveal>
+                <Reveal delay={0.22}>
+                  <button className="about__cv" onClick={() => openPanel('recruiter')}>
+                    <span aria-hidden>📄</span> {t('Mode recruteur — mon CV en une page')}
+                  </button>
                 </Reveal>
               </div>
             </div>

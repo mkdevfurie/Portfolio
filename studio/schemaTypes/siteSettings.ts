@@ -61,6 +61,19 @@ export const siteSettings = defineType({
       group: 'contact',
     }),
     defineField({
+      name: 'calUrl',
+      title: 'Lien de réservation Cal.com',
+      type: 'url',
+      group: 'contact',
+      description: 'Ex. https://cal.com/pseudo/30min — vide = boutons WhatsApp / email.',
+    }),
+    defineField({
+      name: 'githubUser',
+      title: 'Pseudo GitHub (statistiques en direct)',
+      type: 'string',
+      group: 'contact',
+    }),
+    defineField({
       name: 'socials',
       title: 'Réseaux',
       type: 'object',

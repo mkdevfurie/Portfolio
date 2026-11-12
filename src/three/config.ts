@@ -1,16 +1,6 @@
 import * as THREE from 'three'
 
-/** Identifiants + libellés des sections, dans l'ordre de scroll. */
-export const SECTIONS = [
-  { id: 'hero', label: 'Accueil' },
-  { id: 'about', label: 'À propos' },
-  { id: 'projects', label: 'Projets' },
-  { id: 'skills', label: 'Compétences' },
-  { id: 'journey', label: 'Parcours' },
-  { id: 'contact', label: 'Contact' },
-] as const
-
-export type SectionId = (typeof SECTIONS)[number]['id']
+export { SECTIONS, type SectionId } from '@/lib/sections'
 
 /**
  * Trajectoire de la caméra : une image-clé par section.

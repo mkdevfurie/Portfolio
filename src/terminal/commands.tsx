@@ -4,6 +4,8 @@ import type { ExperienceEntry, Project, Service, SiteSettings, Skill } from '@/t
 import { THEMES, type ThemeId } from '@/theme/themes'
 import { scrollToSection } from '@/lib/scroll'
 import { copyText } from '@/lib/toast'
+import { openPanel } from '@/components/Overlay'
+import { unlock } from '@/lib/achievements'
 
 /* ------------------------------------------------------------------ */
 /* Types                                                               */
@@ -22,6 +24,9 @@ export interface TermCtx {
   close: () => void
   matrix: () => void
   startGame: () => void
+  startSnake: () => ReactNode
+  posts: { slug: string; title: string }[]
+  t: (fr: string, vars?: Record<string, string | number>) => string
 }
 
 export interface Command {
@@ -128,18 +133,18 @@ export const COMMANDS: Command[] = [
     name: 'aide',
     aliases: ['help', '?', 'man'],
     help: 'liste des commandes',
-    run: () => (
+    run: (_, { t }) => (
       <div className="t-help">
         {COMMANDS.filter((c) => c.help).map((c) => (
           <div key={c.name}>
             <Cmd c={c.name} />
             <span className="t-pad">{' '.repeat(Math.max(1, 13 - c.name.length))}</span>
             <Dim>{c.usage ? `${c.usage} — ` : ''}</Dim>
-            {c.help}
+            {t(c.help!)}
           </div>
         ))}
         <div className="t-gap">
-          <Dim>Astuces : Tab complète, ↑ ↓ parcourent l'historique, Ctrl+L efface. Il y a aussi des commandes cachées…</Dim>
+          <Dim>{t('Astuces : Tab complète, ↑ ↓ parcourent l’historique, Ctrl+L efface. Il y a aussi des commandes cachées…')}</Dim>
         </div>
       </div>
     ),
@@ -148,7 +153,7 @@ export const COMMANDS: Command[] = [
     name: 'whoami',
     aliases: ['moi'],
     help: 'qui suis-je ?',
-    run: (_, { settings: s }) => (
+    run: (_, { settings: s, t }) => (
       <>
         <div>
           <Hl>
@@ -158,7 +163,7 @@ export const COMMANDS: Command[] = [
         </div>
         <div>{s.bio1}</div>
         <div className="t-gap">
-          <Dim>Pour en savoir plus : </Dim>
+          <Dim>{t('Pour en savoir plus :')} </Dim>
           <Cmd c="apropos" /> <Cmd c="projets" /> <Cmd c="neofetch" />
         </div>
       </>
@@ -276,7 +281,7 @@ export const COMMANDS: Command[] = [
     help: 'mes réalisations (filtre possible)',
     usage: 'projets [web|mobile|ia…]',
     args: () => ['web', 'mobile', 'ia'],
-    run: ([q], { projects }) => {
+    run: ([q], { projects, t }) => {
       const list = projects
         .map((p, i) => ({ p, i }))
         .filter(({ p }) => !q || norm(`${p.tags.join(' ')} ${p.title} ${p.subtitle}`).includes(norm(q)))
@@ -295,7 +300,7 @@ export const COMMANDS: Command[] = [
             </div>
           ))}
           <div className="t-gap">
-            <Dim>Cliquez sur un projet ou tapez </Dim>
+            <Dim>{t('Cliquez sur un projet ou tapez')} </Dim>
             <Hl>ouvrir {'<n°>'}</Hl>
           </div>
         </>
@@ -467,6 +472,95 @@ export const COMMANDS: Command[] = [
     run: (_, ctx) => ctx.startGame(),
   },
   {
+    name: 'snake',
+    aliases: ['serpent'],
+    help: 'le Snake, version terminal',
+    run: (_, ctx) => ctx.startSnake(),
+  },
+  {
+    name: 'arcade',
+    aliases: ['jeux', 'games'],
+    help: 'Stack Catch, Memory, Quiz…',
+    run: (_, ctx) => {
+      ctx.close()
+      openPanel('games')
+      return <Ok>Ouverture de l’arcade 🎮</Ok>
+    },
+  },
+  {
+    name: 'succes',
+    aliases: ['achievements', 'badges', 'trophees'],
+    help: 'mes succès débloqués',
+    run: (_, ctx) => {
+      ctx.close()
+      openPanel('achievements')
+      return <Ok>🏆</Ok>
+    },
+  },
+  {
+    name: 'devis',
+    aliases: ['estimer', 'prix', 'budget'],
+    help: 'estimer le prix de votre projet',
+    run: (_, ctx) => {
+      ctx.close()
+      openPanel('estimator')
+      return <Ok>Ouverture de l’estimateur 🧮</Ok>
+    },
+  },
+  {
+    name: 'rdv',
+    aliases: ['appel', 'call', 'booking'],
+    help: 'réserver un appel',
+    run: (_, ctx) => {
+      ctx.close()
+      openPanel('booking')
+      return <Ok>📅</Ok>
+    },
+  },
+  {
+    name: 'recruteur',
+    aliases: ['recruiter', 'resume-print'],
+    help: 'mon CV en une page (imprimable)',
+    run: (_, ctx) => {
+      ctx.close()
+      openPanel('recruiter')
+      return <Ok>📄</Ok>
+    },
+  },
+  {
+    name: 'blog',
+    aliases: ['articles'],
+    help: 'mes derniers articles',
+    run: (_, ctx) => {
+      const posts = ctx.posts
+      if (!posts.length) return <Dim>Aucun article pour le moment.</Dim>
+      return (
+        <>
+          {posts.map((p) => (
+            <div key={p.slug}>
+              <Dim>›</Dim>{' '}
+              <button type="button" className="t-cmd" data-cmd={`lire ${p.slug}`}>
+                {p.title}
+              </button>
+            </div>
+          ))}
+        </>
+      )
+    },
+  },
+  {
+    name: 'lire',
+    aliases: ['read'],
+    usage: 'lire <article>',
+    args: (ctx) => ctx.posts.map((p) => p.slug),
+    run: ([slug], ctx) => {
+      if (!slug) return <Err>Usage : lire {'<article>'} — voir <Cmd c="blog" /></Err>
+      ctx.close()
+      openPanel(`post:${slug}`)
+      return <Ok>📖</Ok>
+    },
+  },
+  {
     name: 'historique',
     aliases: ['history'],
     help: 'commandes déjà tapées',
@@ -568,6 +662,16 @@ export const COMMANDS: Command[] = [
     run: () => <pre className="t-ascii">{ASCII_LOGO}</pre>,
   },
 ]
+
+// les commandes sans aide (cachées) débloquent le succès « Agent secret »
+COMMANDS.forEach((c) => {
+  if (c.help || ['echo', 'lire'].includes(c.name)) return
+  const run = c.run
+  c.run = (args, ctx) => {
+    unlock('secret')
+    return run(args, ctx)
+  }
+})
 
 const INDEX = new Map<string, Command>()
 COMMANDS.forEach((c) => {

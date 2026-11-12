@@ -1,4 +1,6 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { useI18n } from '@/i18n'
+import { localize } from './en'
 import { loadContent } from '@/lib/loadContent'
 import { fallbackContent } from './fallback'
 import { ContentContext, type ContentState } from './context'
@@ -21,5 +23,11 @@ export function ContentProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
-  return <ContentContext.Provider value={state}>{children}</ContentContext.Provider>
+  const { lang } = useI18n()
+  const value = useMemo(
+    () => (lang === 'en' ? { ...state, content: localize(state.content) } : state),
+    [state, lang],
+  )
+
+  return <ContentContext.Provider value={value}>{children}</ContentContext.Provider>
 }

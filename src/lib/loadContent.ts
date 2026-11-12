@@ -4,6 +4,7 @@ import { fallbackContent } from '@/content/fallback'
 import { stackLogo } from '@/content/stackLogos'
 import type {
   ContentSource,
+  GeoPoint,
   ImageRef,
   PortfolioContent,
   Project,
@@ -26,6 +27,16 @@ function cleanImage(raw: unknown): ImageRef | undefined {
     aspect: typeof r.aspect === 'number' ? r.aspect : undefined,
     dominant: typeof r.dominant === 'string' ? r.dominant : undefined,
   }
+}
+
+const localOf = (raw: Record<string, unknown>) =>
+  fallbackContent.projects.find((p) => p.slug === String(raw.slug ?? ''))
+
+function cleanGeo(raw: unknown): GeoPoint | undefined {
+  if (!raw || typeof raw !== 'object') return undefined
+  const r = raw as Record<string, unknown>
+  if (typeof r.lat !== 'number' || typeof r.lon !== 'number') return undefined
+  return { label: String(r.label ?? ''), lat: r.lat, lon: r.lon }
 }
 
 /** Applique des valeurs par defaut a un projet Sanity potentiellement incomplet. */
@@ -56,6 +67,9 @@ function normaliseProject(raw: Record<string, unknown>, index: number): Project 
     order: typeof raw.order === 'number' ? raw.order : index + 1,
     bgColor: String(raw.bgColor ?? fb.bgColor),
     nameColor: String(raw.nameColor ?? fb.nameColor),
+    challenge: raw.challenge ? String(raw.challenge) : localOf(raw)?.challenge,
+    results: Array.isArray(raw.results) ? (raw.results as string[]) : localOf(raw)?.results,
+    location: cleanGeo(raw.location) ?? localOf(raw)?.location,
   }
 }
 
@@ -137,6 +151,32 @@ export async function loadContent(): Promise<LoadResult> {
       services: Array.isArray(raw.services) && raw.services.length
         ? (raw.services as PortfolioContent['services'])
         : fallbackContent.services,
+      testimonials: Array.isArray(raw.testimonials)
+        ? (raw.testimonials as Record<string, unknown>[]).map((t, i) => ({
+            _id: String(t._id ?? `t-${i}`),
+            name: String(t.name ?? ''),
+            role: String(t.role ?? ''),
+            company: t.company ? String(t.company) : undefined,
+            quote: String(t.quote ?? ''),
+            avatar: cleanImage(t.avatar),
+            order: typeof t.order === 'number' ? t.order : i + 1,
+          })).filter((t) => t.name && t.quote)
+        : fallbackContent.testimonials,
+      posts: mergeByKey(
+        Array.isArray(raw.posts)
+          ? (raw.posts as Record<string, unknown>[]).map((p, i) => ({
+              _id: String(p._id ?? `post-${i}`),
+              title: String(p.title ?? ''),
+              slug: String(p.slug ?? `article-${i}`),
+              excerpt: String(p.excerpt ?? ''),
+              date: String(p.date ?? ''),
+              tags: Array.isArray(p.tags) ? (p.tags as string[]) : [],
+              body: Array.isArray(p.body) ? (p.body as string[]) : [],
+            }))
+          : [],
+        fallbackContent.posts,
+        (p) => p.slug,
+      ),
     }
 
     return { content, source: 'sanity' }

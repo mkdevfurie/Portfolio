@@ -1,18 +1,21 @@
 import { Reveal } from '@/components/Reveal'
 import { useSkills } from '@/content/hooks'
 import { ScrambleText } from '@/components/ScrambleText'
+import { GithubActivity } from '@/components/GithubActivity'
+import { useT } from '@/i18n'
 
 export function Skills() {
   const skills = useSkills()
+  const t = useT()
 
   return (
     <section id="skills" className="section">
       <div className="section__inner">
         <Reveal>
-          <span className="eyebrow"><ScrambleText text="Compétences" /></span>
-          <h2 className="section__title">Stack & outils</h2>
+          <span className="eyebrow"><ScrambleText text={t('Compétences')} /></span>
+          <h2 className="section__title">{t('Stack & outils')}</h2>
           <p className="section__lead">
-            Les technologies avec lesquelles je travaille au quotidien.
+            {t('Les technologies avec lesquelles je travaille au quotidien.')}
           </p>
         </Reveal>
 
@@ -35,6 +38,8 @@ export function Skills() {
             </Reveal>
           ))}
         </div>
+
+        <GithubActivity />
       </div>
     </section>
   )

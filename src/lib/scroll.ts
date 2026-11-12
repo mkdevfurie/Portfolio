@@ -1,5 +1,5 @@
 import Lenis from 'lenis'
-import { SECTIONS } from '@/three/config'
+import { SECTIONS } from '@/lib/sections'
 
 let lenis: Lenis | null = null
 let rafId = 0

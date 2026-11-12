@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useT } from '@/i18n'
 
 /** Lomé est en GMT toute l'année (pas d'heure d'été). */
 const TZ = 'Africa/Lome'
@@ -13,6 +14,7 @@ function now() {
 /** Heure locale à Lomé + indicateur de disponibilité. */
 export function LocalTime() {
   const [t, setT] = useState(now)
+  const tr = useT()
   useEffect(() => {
     const id = window.setInterval(() => setT(now()), 15_000)
     return () => window.clearInterval(id)
@@ -22,8 +24,8 @@ export function LocalTime() {
     <p className="localtime">
       <span className={`localtime__dot ${t.awake ? 'is-on' : ''}`} />
       <span>
-        Il est <strong>{t.time}</strong> à Lomé ·{' '}
-        {t.awake ? 'je suis probablement en ligne' : 'je vous réponds dès demain matin'}
+        {tr('Il est')} <strong>{t.time}</strong> {tr('à Lomé')} ·{' '}
+        {t.awake ? tr('je suis probablement en ligne') : tr('je vous réponds dès demain matin')}
       </span>
     </p>
   )

@@ -4,6 +4,8 @@ import { Float, useTexture } from '@react-three/drei'
 import * as THREE from 'three'
 import { sceneColors } from './config'
 import { getScroll } from '@/lib/scroll'
+import type { Project } from '@/types/content'
+import { ProjectPins } from './ProjectPins'
 import dayMap from '@/assets/earth/earth_atmos.webp'
 import normalMap from '@/assets/earth/earth_normal.webp'
 import specularMap from '@/assets/earth/earth_specular.webp'
@@ -11,6 +13,7 @@ import cloudsMap from '@/assets/earth/earth_clouds.webp'
 
 interface Props {
   reducedMotion: boolean
+  projects: Project[]
 }
 
 const RADIUS = 1.4
@@ -87,7 +90,7 @@ const worldPos = new THREE.Vector3()
  * Il voyage d'une section à l'autre, tourne avec le scroll, et se tourne
  * vers Lomé dans les sections Accueil et Contact.
  */
-export function Globe({ reducedMotion }: Props) {
+export function Globe({ reducedMotion, projects }: Props) {
   const root = useRef<THREE.Group>(null)
   const spinner = useRef<THREE.Group>(null)
   const clouds = useRef<THREE.Mesh>(null)
@@ -199,6 +202,9 @@ export function Globe({ reducedMotion }: Props) {
                 depthWrite={false}
               />
             </mesh>
+
+            {/* une épingle par projet */}
+            <ProjectPins projects={projects} radius={RADIUS * 1.005} />
 
             {/* repère Lomé */}
             <group position={LOME_POS.clone().multiplyScalar(1.004)} quaternion={markerQuat}>

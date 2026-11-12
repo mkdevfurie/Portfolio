@@ -1,13 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import { SECTIONS } from '@/three/config'
+import { SECTIONS } from '@/lib/sections'
 import { scrollToSection } from '@/lib/scroll'
 import { useSettings } from '@/content/hooks'
 import { THEMES } from '@/theme/themes'
 import { useTheme } from '@/theme/ThemeProvider'
 import { copyText, isTyping, toast } from '@/lib/toast'
 import { EASE } from '@/lib/motion'
+import { useI18n } from '@/i18n'
 import { openTerminal } from './Terminal'
+import { openPanel } from './Overlay'
+import { unlock } from '@/lib/achievements'
 
 interface Action {
   id: string
@@ -36,6 +39,7 @@ export const PALETTE_SHORTCUT = isMac ? '⌘K' : 'Ctrl K'
  */
 export function CommandPalette() {
   const s = useSettings()
+  const { t: tr } = useI18n()
   const { theme, setTheme } = useTheme()
   const [open, setOpen] = useState(false)
   const [q, setQ] = useState('')
@@ -60,16 +64,27 @@ export function CommandPalette() {
       keywords: 'console shell commande jeu',
       run: openTerminal,
     })
+    ;(
+      [
+        ['games', '🎮 Arcade : mini-jeux', 'jeu game memory quiz catch'],
+        ['achievements', '🏆 Mes succès', 'badge trophee'],
+        ['estimator', '🧮 Estimer mon projet', 'devis prix tarif budget'],
+        ['booking', '📅 Réserver un appel', 'rendez-vous rdv calendrier'],
+        ['recruiter', '📄 Mode recruteur (CV une page)', 'cv imprimer pdf resume'],
+      ] as const
+    ).forEach(([id, label, keywords]) =>
+      a.push({ id: `panel-${id}`, group: 'Outils', label, keywords, run: () => openPanel(id) }),
+    )
     THEMES.forEach((t) =>
       a.push({
         id: `theme-${t.id}`,
         group: 'Thème',
-        label: `Thème ${t.label}`,
-        hint: t.id === theme.id ? 'actif' : undefined,
+        label: `${tr('Thème')} ${tr(t.label)}`,
+        hint: t.id === theme.id ? tr('actif') : undefined,
         keywords: 'couleur theme mode',
         run: () => {
           setTheme(t.id)
-          toast(`Thème ${t.label} activé`)
+          toast(tr('Thème {name} activé', { name: tr(t.label) }))
         },
       }),
     )
@@ -79,7 +94,7 @@ export function CommandPalette() {
       label: "Copier l'adresse email",
       hint: s.email,
       keywords: 'mail courriel',
-      run: () => copyText(s.email, 'Email copié dans le presse-papiers'),
+      run: () => copyText(s.email, tr('Email copié dans le presse-papiers')),
     })
     if (s.whatsapp)
       a.push({
@@ -108,10 +123,10 @@ export function CommandPalette() {
       group: 'Liens',
       label: 'Copier le lien du portfolio',
       keywords: 'partager url',
-      run: () => copyText(location.origin, 'Lien copié — merci de partager !'),
+      run: () => copyText(location.origin, tr('Lien copié — merci de partager !')),
     })
-    return a
-  }, [s, theme.id, setTheme])
+    return a.map((x) => ({ ...x, label: tr(x.label), group: tr(x.group) }))
+  }, [s, theme.id, setTheme, tr])
 
   const filtered = useMemo(() => {
     const n = (x: string) => x.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
@@ -142,7 +157,7 @@ export function CommandPalette() {
         const i = THEMES.findIndex((t) => t.id === theme.id)
         const next = THEMES[(i + 1) % THEMES.length]
         setTheme(next.id)
-        toast(`Thème ${next.label}`)
+        toast(`${tr('Thème')} ${tr(next.label)}`)
       }
     }
     const onOpen = () => setOpen(true)
@@ -152,10 +167,11 @@ export function CommandPalette() {
       window.removeEventListener('keydown', onKey)
       window.removeEventListener(OPEN_EVENT, onOpen)
     }
-  }, [open, theme.id, setTheme])
+  }, [open, theme.id, setTheme, tr])
 
   useEffect(() => {
     if (open) {
+      unlock('palette')
       setQ('')
       setSel(0)
       requestAnimationFrame(() => input.current?.focus())
@@ -207,7 +223,7 @@ export function CommandPalette() {
             className="cmdk__panel"
             role="dialog"
             aria-modal="true"
-            aria-label="Palette de commandes"
+            aria-label={tr('Palette de commandes')}
             initial={{ opacity: 0, y: -14, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.98 }}
@@ -223,16 +239,16 @@ export function CommandPalette() {
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 onKeyDown={onInputKey}
-                placeholder="Rechercher une action, une section, un thème…"
-                aria-label="Rechercher une commande"
+                placeholder={tr('Rechercher une action, une section, un thème…')}
+                aria-label={tr('Rechercher une commande')}
                 aria-controls="cmdk-list"
                 aria-activedescendant={filtered[sel] ? `cmdk-${filtered[sel].id}` : undefined}
               />
-              <kbd>Échap</kbd>
+              <kbd>{tr('Échap')}</kbd>
             </div>
 
             <ul className="cmdk__list" id="cmdk-list" role="listbox" ref={list} data-lenis-prevent>
-              {filtered.length === 0 && <li className="cmdk__empty">Aucun résultat pour « {q} »</li>}
+              {filtered.length === 0 && <li className="cmdk__empty">{tr('Aucun résultat pour « {q} »', { q })}</li>}
               {filtered.map((a, i) => {
                 const head = a.group !== lastGroup ? a.group : null
                 lastGroup = a.group
@@ -259,13 +275,13 @@ export function CommandPalette() {
             <div className="cmdk__foot">
               <span>
                 <kbd>↑</kbd>
-                <kbd>↓</kbd> naviguer
+                <kbd>↓</kbd> {tr('naviguer')}
               </span>
               <span>
-                <kbd>↵</kbd> valider
+                <kbd>↵</kbd> {tr('valider')}
               </span>
               <span>
-                <kbd>T</kbd> thème suivant
+                <kbd>T</kbd> {tr('thème suivant')}
               </span>
             </div>
           </motion.div>

@@ -1,18 +1,22 @@
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { ContentProvider } from '@/content/ContentProvider'
 import { useSettings } from '@/content/hooks'
 import { initScroll, destroyScroll } from '@/lib/scroll'
-import { Scene } from '@/three/Scene'
 import { Loader } from '@/components/Loader'
 import { Nav } from '@/components/Nav'
 import { SourcePill } from '@/components/SourcePill'
 import { ScrollProgress } from '@/components/ScrollProgress'
 import { ThemeProvider } from '@/theme/ThemeProvider'
+import { I18nProvider } from '@/i18n'
 import { Cursor } from '@/components/Cursor'
 import { CommandPalette } from '@/components/CommandPalette'
 import { BackToTop } from '@/components/BackToTop'
 import { Toaster } from '@/components/Toaster'
 import { Terminal } from '@/components/Terminal'
+import { Estimator } from '@/components/Estimator'
+import { Booking } from '@/components/Booking'
+import { RecruiterMode } from '@/components/RecruiterMode'
+import { Arcade } from '@/components/Arcade'
 import { Hero } from '@/sections/Hero'
 import { About } from '@/sections/About'
 import { Projects } from '@/sections/Projects'
@@ -20,6 +24,28 @@ import { Skills } from '@/sections/Skills'
 import { Journey } from '@/sections/Journey'
 import { Contact } from '@/sections/Contact'
 import { Footer } from '@/sections/Footer'
+
+// La scène 3D (three.js, ~1 Mo) est chargée après le premier affichage du texte.
+const Scene = lazy(() => import('@/three/Scene').then((m) => ({ default: m.Scene })))
+
+function DeferredScene() {
+  const [ready, setReady] = useState(false)
+  useEffect(() => {
+    const start = () => setReady(true)
+    const ric = (window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number })
+      .requestIdleCallback
+    const id = ric ? ric(start, { timeout: 1200 }) : window.setTimeout(start, 300)
+    return () => {
+      if (!ric) window.clearTimeout(id)
+    }
+  }, [])
+  if (!ready) return <div className="scene-fallback" aria-hidden />
+  return (
+    <Suspense fallback={<div className="scene-fallback" aria-hidden />}>
+      <Scene />
+    </Suspense>
+  )
+}
 
 /** Met à jour <title>/<meta> depuis les réglages CMS (les couleurs passent par ThemeProvider). */
 function DocumentChrome() {
@@ -42,7 +68,7 @@ function Shell() {
     <>
       <DocumentChrome />
       <Loader />
-      <Scene />
+      <DeferredScene />
       <ScrollProgress />
       <Nav />
 
@@ -59,6 +85,10 @@ function Shell() {
       <BackToTop />
       <CommandPalette />
       <Terminal />
+      <Estimator />
+      <Booking />
+      <RecruiterMode />
+      <Arcade />
       <Toaster />
       <Cursor />
       {import.meta.env.DEV && <SourcePill />}
@@ -68,10 +98,12 @@ function Shell() {
 
 export default function App() {
   return (
-    <ContentProvider>
-      <ThemeProvider>
-        <Shell />
-      </ThemeProvider>
-    </ContentProvider>
+    <I18nProvider>
+      <ContentProvider>
+        <ThemeProvider>
+          <Shell />
+        </ThemeProvider>
+      </ContentProvider>
+    </I18nProvider>
   )
 }

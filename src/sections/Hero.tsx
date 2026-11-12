@@ -4,9 +4,11 @@ import { scrollToSection } from '@/lib/scroll'
 import { fadeUp as item, staggerParent as container } from '@/lib/motion'
 import { openTerminal } from '@/components/Terminal'
 import { ME } from '@/content/me'
+import { useT } from '@/i18n'
 
 export function Hero() {
   const s = useSettings()
+  const t = useT()
   const titleLines = s.title.split('\n')
 
   return (
@@ -37,13 +39,13 @@ export function Hero() {
 
         <motion.div className="hero__cta" variants={item}>
           <button className="btn btn--primary" onClick={() => scrollToSection('projects')}>
-            Voir les projets
+            {t('Voir les projets')}
             <span aria-hidden>→</span>
           </button>
           <button className="btn btn--ghost" onClick={() => scrollToSection('contact')}>
-            Me contacter
+            {t('Me contacter')}
           </button>
-          <button className="btn btn--term" onClick={openTerminal} title="Ouvrir le terminal (touche ²)">
+          <button className="btn btn--term" onClick={openTerminal} title={t('Ouvrir le terminal (touche ²)')}>
             <span className="btn--term__prompt" aria-hidden>
               &gt;_
             </span>
@@ -67,10 +69,10 @@ export function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.6, duration: 1 }}
-        aria-label="Faire défiler"
+        aria-label={t('Faire défiler')}
       >
         <span className="scroll-cue__wheel" />
-        défiler
+        {t('défiler')}
       </motion.button>
     </section>
   )

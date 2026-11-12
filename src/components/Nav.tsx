@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'motion/react'
-import { SECTIONS } from '@/three/config'
+import { SECTIONS } from '@/lib/sections'
 import { currentSectionIndex, scrollToSection } from '@/lib/scroll'
 import { useSettings } from '@/content/hooks'
 import { EASE } from '@/lib/motion'
 import { ThemeSwitcher } from './ThemeSwitcher'
 import { Logo } from './Logo'
 import { openCommandPalette, PALETTE_SHORTCUT } from './CommandPalette'
+import { useI18n } from '@/i18n'
+import { LangSwitch } from './LangSwitch'
 
 export function Nav() {
   const settings = useSettings()
+  const { t } = useI18n()
   const [active, setActive] = useState(0)
   const [open, setOpen] = useState(false)
 
@@ -40,7 +43,7 @@ export function Nav() {
       animate={{ y: 0, opacity: 1 }}
       transition={{ delay: 0.4, duration: 0.8, ease: EASE }}
     >
-      <button className="nav__brand" onClick={() => go('hero')} aria-label="Retour en haut">
+      <button className="nav__brand" onClick={() => go('hero')} aria-label={t('Retour en haut')}>
         <Logo size={24} />
         <span className="nav__brand-sep" aria-hidden />
         <span className="nav__brand-name">
@@ -56,7 +59,7 @@ export function Nav() {
             className={`nav__link ${i === active ? 'is-active' : ''}`}
             onClick={() => go(s.id)}
           >
-            {s.label}
+            {t(s.label)}
           </button>
         ))}
         {settings.cvUrl ? (
@@ -67,18 +70,19 @@ export function Nav() {
       </nav>
 
       <div className="nav__actions">
-        <button className="nav__cmd" onClick={openCommandPalette} aria-label="Ouvrir la palette de commandes" title="Commandes rapides">
+        <button className="nav__cmd" onClick={openCommandPalette} aria-label={t('Ouvrir la palette de commandes')} title={t('Commandes rapides')}>
           <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden>
             <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" strokeWidth="2" />
             <path d="M20 20l-3.5-3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
           </svg>
           <kbd>{PALETTE_SHORTCUT}</kbd>
         </button>
+        <LangSwitch />
         <ThemeSwitcher />
         <button
         className={`nav__burger ${open ? 'is-open' : ''}`}
         onClick={() => setOpen((v) => !v)}
-        aria-label="Menu"
+        aria-label={t('Menu')}
         aria-expanded={open}
       >
         <span />
