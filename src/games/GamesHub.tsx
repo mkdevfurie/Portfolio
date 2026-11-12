@@ -75,7 +75,7 @@ export function GamesHub() {
   const close = useCallback(() => setOpen(false), [])
 
   return (
-    <Overlay open={open} onClose={close} title={t('Arcade MKD')} width={760}>
+    <Overlay open={open} onClose={close} title={t('Arcade')} width={760}>
       <div className="hub__tabs" role="tablist">
         {TABS.map((g) => (
           <button

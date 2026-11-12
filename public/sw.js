@@ -4,7 +4,7 @@
  * - polices / images externes : cache puis mise à jour en arrière-plan
  * Les appels d'API (Sanity, GitHub, Web3Forms) ne sont jamais mis en cache ici.
  */
-const VERSION = 'mkd-v1'
+const VERSION = 'mkd-v3'
 const SHELL = ['/', '/favicon.svg', '/icon-192.png', '/manifest.webmanifest']
 
 self.addEventListener('install', (e) => {

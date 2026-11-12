@@ -103,11 +103,11 @@ function resolveDir(raw?: string) {
   return DIRS[k] ?? DIR_ALIASES[k]
 }
 
-export const ASCII_LOGO = String.raw` __  __ _  ______
-|  \/  | |/ /  _ \
-| |\/| | ' /| | | |
-| |  | | . \| |_| |
-|_|  |_|_|\_\____/`
+export const ASCII_LOGO = String.raw`   /          \
+  /     /\     \
+ <     <  >     >
+  \     \/     /
+   \          /`
 
 function findProject(q: string, projects: Project[]) {
   const n = Number(q)
@@ -658,7 +658,7 @@ export const COMMANDS: Command[] = [
     },
   },
   {
-    name: 'mkd',
+    name: 'logo',
     run: () => <pre className="t-ascii">{ASCII_LOGO}</pre>,
   },
 ]

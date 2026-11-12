@@ -4,6 +4,7 @@ import { useSkills } from '@/content/hooks'
 import { useT } from '@/i18n'
 import { unlock } from '@/lib/achievements'
 import { getBest, saveBest } from './storage'
+import { Logo } from '@/components/Logo'
 
 interface Card {
   id: number
@@ -107,7 +108,9 @@ export function Memory() {
               aria-label={open ? c.label : t('Carte cachée')}
             >
               <span className="memory__inner">
-                <span className="memory__back">MKD</span>
+                <span className="memory__back">
+                  <Logo size={36} />
+                </span>
                 <span className="memory__front">
                   {c.img ? <img src={c.img} alt="" /> : <b>{c.label.slice(0, 2)}</b>}
                   <small>{c.label}</small>

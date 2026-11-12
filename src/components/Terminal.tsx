@@ -449,7 +449,7 @@ function MatrixRain() {
     const size = 14
     const cols = Math.ceil(w / size)
     const drops = Array.from({ length: cols }, () => Math.random() * -40)
-    const chars = 'アイウエオカキクケコサシスセソ0123456789MKD<>/{}'
+    const chars = 'アイウエオカキクケコサシスセソ0123456789<>/{}◆'
     const color = getComputedStyle(document.documentElement).getPropertyValue('--c-accent').trim() || '#3fd68f'
     let raf = 0
     const draw = () => {

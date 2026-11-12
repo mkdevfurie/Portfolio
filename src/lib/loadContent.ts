@@ -39,6 +39,12 @@ function cleanGeo(raw: unknown): GeoPoint | undefined {
   return { label: String(r.label ?? ''), lat: r.lat, lon: r.lon }
 }
 
+/** Retire les champs vides (null, '') renvoyés par GROQ pour ne pas écraser les valeurs locales. */
+function withoutEmpty(raw: unknown): Record<string, unknown> {
+  if (!raw || typeof raw !== 'object') return {}
+  return Object.fromEntries(Object.entries(raw).filter(([, v]) => v !== null && v !== undefined && v !== ''))
+}
+
 /** Applique des valeurs par defaut a un projet Sanity potentiellement incomplet. */
 function normaliseProject(raw: Record<string, unknown>, index: number): Project {
   const fb = fallbackContent.projects[index % fallbackContent.projects.length]
@@ -119,10 +125,10 @@ export async function loadContent(): Promise<LoadResult> {
     const content: PortfolioContent = {
       settings: {
         ...fallbackContent.settings,
-        ...(raw.settings as object | null),
+        ...withoutEmpty(raw.settings),
         socials: {
           ...fallbackContent.settings.socials,
-          ...((raw.settings as Record<string, unknown> | null)?.socials as object | undefined),
+          ...withoutEmpty((raw.settings as Record<string, unknown> | null)?.socials),
         },
         theme: {
           ...fallbackContent.settings.theme,
@@ -178,6 +184,10 @@ export async function loadContent(): Promise<LoadResult> {
         (p) => p.slug,
       ),
     }
+
+    // le lien GitHub suit toujours le pseudo GitHub (une seule source de vérité)
+    const gh = content.settings.githubUser
+    if (gh) content.settings.socials = { ...content.settings.socials, github: `https://github.com/${gh}` }
 
     return { content, source: 'sanity' }
   } catch (err) {

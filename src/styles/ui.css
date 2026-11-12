@@ -98,7 +98,26 @@
 }
 .nav__brand:hover .logo {
   transform: scale(1.06);
-  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--c-accent) 60%, transparent));
+  filter: drop-shadow(0 0 10px rgba(76, 141, 255, 0.55));
+}
+.logo__left,
+.logo__right,
+.logo__gem {
+  transition: transform 0.45s var(--ease-out);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.nav__brand:hover .logo__left,
+.footer__brand:hover .logo__left {
+  transform: translateX(-6px);
+}
+.nav__brand:hover .logo__right,
+.footer__brand:hover .logo__right {
+  transform: translateX(6px);
+}
+.nav__brand:hover .logo__gem,
+.footer__brand:hover .logo__gem {
+  transform: rotate(90deg) scale(1.1);
 }
 .nav__brand-sep {
   width: 1px;
@@ -1017,11 +1036,19 @@ body,
   animation: logo-draw 1.1s var(--ease-out) forwards;
   animation-delay: calc(var(--i) * 0.14s);
 }
-.logo--draw .logo__dot {
+.logo--draw .logo__gem {
   transform-box: fill-box;
   transform-origin: center;
-  transform: scale(0);
-  animation: logo-dot 0.5s var(--ease-out) 0.75s forwards;
+  transform: scale(0) rotate(-90deg);
+  animation: logo-gem 0.6s var(--ease-out) 0.75s forwards;
+}
+@keyframes logo-gem {
+  70% {
+    transform: scale(1.25) rotate(8deg);
+  }
+  to {
+    transform: scale(1) rotate(0deg);
+  }
 }
 @keyframes logo-draw {
   to {
@@ -1408,10 +1435,11 @@ kbd {
     animation: none;
     stroke-dashoffset: 0;
   }
-  .logo--draw .logo__dot {
+  .logo--draw .logo__gem {
     animation: none;
     transform: none;
   }
+
 }
 
 /* ================= Terminal interactif ================= */
@@ -1738,13 +1766,12 @@ kbd {
 .portrait__mark {
   position: absolute;
   left: 50%;
-  top: 6%;
-  width: 135%;
+  top: 2%;
+  width: 115%;
   height: auto;
   translate: -50% 0;
-  opacity: 0.16;
-  --logo-from: #fff;
-  --logo-to: var(--c-pale);
+  opacity: 0.14;
+  color: #fff;
 }
 .portrait:hover .portrait__bg {
   transform: scale(1.06) translateY(-2%);
@@ -2938,12 +2965,8 @@ kbd {
   backface-visibility: hidden;
 }
 .memory__back {
-  font-family: var(--font-display);
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: color-mix(in srgb, #fff 70%, transparent);
-  background: linear-gradient(135deg, var(--c-accent), var(--c-primary));
-  border: 1px solid var(--panel-border-strong);
+  background: radial-gradient(circle at 50% 40%, #16203a, #0a0e16 70%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 .memory__front {
   transform: rotateY(180deg);
@@ -3180,4 +3203,20 @@ kbd {
 .lang-switch span.is-on {
   background: linear-gradient(135deg, var(--c-accent), var(--c-primary));
   color: #fff;
+}
+
+/* Menu : rien ne passe à la ligne ; entre tablette et grand écran on allège la barre */
+.nav__link,
+.nav__cmd kbd {
+  white-space: nowrap;
+}
+@media (max-width: 1120px) {
+  .nav__brand-sep,
+  .nav__brand-name,
+  .nav__cmd kbd {
+    display: none;
+  }
+  .nav__cmd {
+    padding: 0 10px;
+  }
 }

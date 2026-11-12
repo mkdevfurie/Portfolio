@@ -34,7 +34,7 @@ export function Portrait({ name, role }: Props) {
     <figure className="portrait" onPointerMove={onMove} onPointerLeave={onLeave}>
       <div className="portrait__card" ref={card}>
         <span className="portrait__bg" aria-hidden>
-          <Logo size={120} dot={false} className="portrait__mark" />
+          <Logo size={120} mono className="portrait__mark" />
         </span>
         <img src={ME.portrait} alt={t(ME.alt)} width={640} height={800} loading="lazy" decoding="async" />
         <span className="portrait__glare" aria-hidden />

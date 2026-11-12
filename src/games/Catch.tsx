@@ -153,10 +153,15 @@ export function Catch() {
       g.beginPath()
       g.roundRect(paddle - 50, PY, 100, 14, 7)
       g.fill()
-      g.font = 'bold 10px monospace'
-      g.fillStyle = '#041524'
-      g.textAlign = 'center'
-      g.fillText('MKD', paddle, PY + 10.5)
+      // losange rouge du logo au centre du panier
+      g.fillStyle = '#e5283a'
+      g.beginPath()
+      g.moveTo(paddle, PY + 1.5)
+      g.lineTo(paddle + 6, PY + 7)
+      g.lineTo(paddle, PY + 12.5)
+      g.lineTo(paddle - 6, PY + 7)
+      g.closePath()
+      g.fill()
 
       if (lv <= 0) {
         setState('over')

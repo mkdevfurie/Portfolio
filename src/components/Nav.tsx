@@ -44,7 +44,7 @@ export function Nav() {
       transition={{ delay: 0.4, duration: 0.8, ease: EASE }}
     >
       <button className="nav__brand" onClick={() => go('hero')} aria-label={t('Retour en haut')}>
-        <Logo size={24} />
+        <Logo size={28} />
         <span className="nav__brand-sep" aria-hidden />
         <span className="nav__brand-name">
           {settings.firstName}

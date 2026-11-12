@@ -1,23 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#378add"/>
-      <stop offset="1" stop-color="#185fa5"/>
-    </linearGradient>
-    <linearGradient id="s" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#fff" stop-opacity=".22"/>
-      <stop offset=".55" stop-color="#fff" stop-opacity="0"/>
-    </linearGradient>
-  </defs>
-  <rect width="64" height="64" rx="14" fill="url(#g)"/>
-  <rect width="64" height="64" rx="14" fill="url(#s)"/>
-  <g transform="translate(5.5 17.5) scale(0.405)"><clipPath id="mkd-band"><rect x="0" y="10" width="146" height="46"/></clipPath>
-<clipPath id="mkd-arm"><rect x="54" y="0" width="92" height="70"/></clipPath>
-<clipPath id="mkd-leg"><polygon points="54,42 86,4 146,4 146,66 54,66"/></clipPath>
-<g clip-path="url(#mkd-band)" fill="none" stroke="#fff" stroke-width="12" stroke-linejoin="miter" stroke-miterlimit="20">
-<path d="M10 70V4L32 36L54 4V70"/>
-<g clip-path="url(#mkd-arm)"><path d="M50 46.75L86 4"/></g>
-<g clip-path="url(#mkd-leg)"><path d="M56 20L90 70"/></g>
-<path d="M102 16V50H108C121 50 125 44 125 33C125 22 121 16 108 16Z"/>
-</g></g>
+  <rect width="64" height="64" rx="14" fill="#0a0e16"/>
+  <rect x="0.5" y="0.5" width="63" height="63" rx="13.5" fill="none" stroke="#fff" stroke-opacity=".08"/>
+  <g transform="translate(9 9) scale(0.46)"><defs><linearGradient id="fav-g" gradientUnits="userSpaceOnUse" x1="8" y1="10" x2="92" y2="90"><stop offset="0" stop-color="#4c8dff"/><stop offset="1" stop-color="#1650d6"/></linearGradient></defs>
+<g fill="none" stroke="url(#fav-g)" stroke-width="14" stroke-linejoin="miter" stroke-linecap="square">
+<path d="M36 18L10 50L36 82"/><path d="M64 18L90 50L64 82"/>
+</g>
+<path d="M50 34L64 50L50 66L36 50Z" fill="#e5283a"/></g>
 </svg>
