@@ -20,7 +20,7 @@ const LOME = { lat: 6.13, lon: 1.22 }
 /** Placement du globe pour chaque section (même ordre que SECTIONS). */
 const KEYS: { pos: [number, number, number]; scale: number }[] = [
   { pos: [2.9, 0.1, -1.2], scale: 0.95 }, // hero — à droite du titre
-  { pos: [-0.3, -1.5, -3.5], scale: 0.7 }, // about — sous le texte, entre les colonnes
+  { pos: [0.4, -2.9, -4.2], scale: 0.62 }, // about — sous les colonnes, à l'écart du texte
   { pos: [0, 1.6, -9], scale: 0.7 }, // projects — au fond de l'allée
   { pos: [1.8, 1.4, -7], scale: 0.9 }, // skills
   { pos: [3.4, 0.2, -2.5], scale: 0.85 }, // journey

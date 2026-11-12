@@ -3,6 +3,7 @@ import { useSettings } from '@/content/hooks'
 import { scrollToSection } from '@/lib/scroll'
 import { fadeUp as item, staggerParent as container } from '@/lib/motion'
 import { openTerminal } from '@/components/Terminal'
+import { ME } from '@/content/me'
 
 export function Hero() {
   const s = useSettings()
@@ -17,7 +18,10 @@ export function Hero() {
         animate="show"
       >
         <motion.span className="hero__pill" variants={item}>
-          <span className="hero__dot" />
+          <span className="hero__avatar">
+            <img src={ME.avatar} alt="" width={160} height={160} />
+            <span className="hero__dot" />
+          </span>
           {s.tagline}
         </motion.span>
 

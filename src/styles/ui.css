@@ -1661,3 +1661,213 @@ kbd {
     font-size: 0.66rem;
   }
 }
+
+/* ================= Photo : avatar de l'accueil ================= */
+.hero__pill:has(.hero__avatar) {
+  padding-left: 5px;
+}
+.hero__avatar {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+.hero__avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  background: radial-gradient(circle at 50% 35%, var(--c-accent), var(--c-primary) 70%);
+  border: 1.5px solid color-mix(in srgb, var(--c-accent) 60%, transparent);
+}
+.hero__avatar .hero__dot {
+  position: absolute;
+  right: -2px;
+  bottom: -1px;
+  width: 9px;
+  height: 9px;
+  border: 2px solid var(--bg);
+}
+
+/* ================= Photo : carte portrait (À propos) ================= */
+.about__bio {
+  display: grid;
+  grid-template-columns: minmax(180px, 230px) 1fr;
+  gap: clamp(20px, 3vw, 36px);
+  align-items: start;
+  margin-top: 26px;
+}
+.about__bio .about__p:first-child {
+  margin-top: 0;
+}
+.portrait {
+  position: relative;
+  margin: 0;
+  perspective: 900px;
+}
+.portrait__card {
+  --rx: 0deg;
+  --ry: 0deg;
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: 22px;
+  overflow: hidden;
+  transform: rotateX(var(--rx)) rotateY(var(--ry));
+  transform-style: preserve-3d;
+  transition: transform 0.5s var(--ease-out), box-shadow 0.5s;
+  box-shadow: 0 30px 60px -28px rgba(0, 0, 0, 0.7),
+    0 0 0 1px color-mix(in srgb, var(--c-accent) 35%, transparent),
+    0 0 50px -18px color-mix(in srgb, var(--c-accent) 55%, transparent);
+}
+.portrait:hover .portrait__card {
+  transition-duration: 0.12s;
+}
+.portrait__card {
+  background: linear-gradient(160deg, var(--c-primary) 0%, var(--c-mid) 45%, var(--c-darker) 100%);
+}
+.portrait__bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 30%, color-mix(in srgb, var(--c-accent) 75%, transparent), transparent 55%),
+    linear-gradient(color-mix(in srgb, var(--c-light) 10%, transparent) 1px, transparent 1px) 0 0 / 22px 22px,
+    linear-gradient(90deg, color-mix(in srgb, var(--c-light) 10%, transparent) 1px, transparent 1px) 0 0 / 22px 22px;
+  transition: transform 0.8s var(--ease-out);
+}
+.portrait__mark {
+  position: absolute;
+  left: 50%;
+  top: 6%;
+  width: 135%;
+  height: auto;
+  translate: -50% 0;
+  opacity: 0.16;
+  --logo-from: #fff;
+  --logo-to: var(--c-pale);
+}
+.portrait:hover .portrait__bg {
+  transform: scale(1.06) translateY(-2%);
+}
+.portrait__card img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
+  display: block;
+  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.35));
+  transition: transform 0.8s var(--ease-out);
+  transform-origin: center bottom;
+}
+.portrait:hover img {
+  transform: scale(1.04);
+}
+.portrait__card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 55%,
+    color-mix(in srgb, var(--c-darker) 85%, transparent)
+  );
+  pointer-events: none;
+}
+.portrait__glare {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+  background: radial-gradient(
+    circle at var(--gx, 50%) var(--gy, 30%),
+    rgba(255, 255, 255, 0.28),
+    transparent 55%
+  );
+  mix-blend-mode: soft-light;
+}
+.portrait:hover .portrait__glare {
+  opacity: 1;
+}
+.portrait__caption {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 12px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+  transform: translateZ(30px);
+}
+.portrait__caption strong {
+  font-family: var(--font-display);
+  font-size: 0.98rem;
+}
+.portrait__caption span {
+  font-size: 0.74rem;
+  opacity: 0.8;
+}
+.portrait__badge {
+  position: absolute;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 11px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  white-space: nowrap;
+  color: var(--text-bright);
+  background: color-mix(in srgb, var(--panel-solid) 88%, transparent);
+  border: 1px solid var(--panel-border-strong);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 24px -12px rgba(0, 0, 0, 0.6);
+  animation: badge-float 5s ease-in-out infinite;
+}
+.portrait__badge--loc {
+  top: 18px;
+  right: -16px;
+}
+.portrait__badge--status {
+  top: 54%;
+  left: -18px;
+  animation-delay: -2.5s;
+}
+.portrait__badge--status i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #3fd68f;
+  box-shadow: 0 0 8px #3fd68f;
+}
+@keyframes badge-float {
+  50% {
+    transform: translateY(-6px);
+  }
+}
+@media (max-width: 620px) {
+  .about__bio {
+    grid-template-columns: 1fr;
+  }
+  .about__photo {
+    width: min(260px, 78%);
+    margin: 4px auto 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .portrait__badge {
+    animation: none;
+  }
+  .portrait__card {
+    transform: none;
+  }
+}
+[data-theme-mode='light'] .portrait__card {
+  background: linear-gradient(160deg, var(--c-accent) 0%, var(--c-primary) 55%, var(--c-dark) 100%);
+}
+[data-theme-mode='light'] .portrait__card::after {
+  background: linear-gradient(180deg, transparent 55%, rgba(8, 18, 36, 0.78));
+}

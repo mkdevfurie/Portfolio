@@ -1,6 +1,7 @@
 import { Reveal } from '@/components/Reveal'
 import { useServices, useSettings } from '@/content/hooks'
 import { ScrambleText } from '@/components/ScrambleText'
+import { Portrait } from '@/components/Portrait'
 
 export function About() {
   const s = useSettings()
@@ -17,12 +18,19 @@ export function About() {
                 Je transforme des besoins métier en produits fiables.
               </h2>
             </Reveal>
-            <Reveal delay={0.08}>
-              <p className="about__p">{s.bio1}</p>
-            </Reveal>
-            <Reveal delay={0.16}>
-              <p className="about__p about__p--dim">{s.bio2}</p>
-            </Reveal>
+            <div className="about__bio">
+              <Reveal delay={0.06} className="about__photo">
+                <Portrait name={`${s.firstName} ${s.lastName}`} role="Développeur web & mobile" />
+              </Reveal>
+              <div>
+                <Reveal delay={0.08}>
+                  <p className="about__p">{s.bio1}</p>
+                </Reveal>
+                <Reveal delay={0.16}>
+                  <p className="about__p about__p--dim">{s.bio2}</p>
+                </Reveal>
+              </div>
+            </div>
           </div>
 
           <div className="about__services">
