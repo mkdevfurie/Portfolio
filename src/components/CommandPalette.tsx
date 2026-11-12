@@ -7,6 +7,7 @@ import { THEMES } from '@/theme/themes'
 import { useTheme } from '@/theme/ThemeProvider'
 import { copyText, isTyping, toast } from '@/lib/toast'
 import { EASE } from '@/lib/motion'
+import { openTerminal } from './Terminal'
 
 interface Action {
   id: string
@@ -51,6 +52,14 @@ export function CommandPalette() {
       keywords: sec.id,
       run: () => scrollToSection(sec.id),
     }))
+    a.push({
+      id: 'terminal',
+      group: 'Outils',
+      label: 'Ouvrir le terminal interactif',
+      hint: '²',
+      keywords: 'console shell commande jeu',
+      run: openTerminal,
+    })
     THEMES.forEach((t) =>
       a.push({
         id: `theme-${t.id}`,
@@ -222,7 +231,7 @@ export function CommandPalette() {
               <kbd>Échap</kbd>
             </div>
 
-            <ul className="cmdk__list" id="cmdk-list" role="listbox" ref={list}>
+            <ul className="cmdk__list" id="cmdk-list" role="listbox" ref={list} data-lenis-prevent>
               {filtered.length === 0 && <li className="cmdk__empty">Aucun résultat pour « {q} »</li>}
               {filtered.map((a, i) => {
                 const head = a.group !== lastGroup ? a.group : null

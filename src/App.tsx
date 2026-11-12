@@ -12,6 +12,7 @@ import { Cursor } from '@/components/Cursor'
 import { CommandPalette } from '@/components/CommandPalette'
 import { BackToTop } from '@/components/BackToTop'
 import { Toaster } from '@/components/Toaster'
+import { Terminal } from '@/components/Terminal'
 import { Hero } from '@/sections/Hero'
 import { About } from '@/sections/About'
 import { Projects } from '@/sections/Projects'
@@ -57,6 +58,7 @@ function Shell() {
 
       <BackToTop />
       <CommandPalette />
+      <Terminal />
       <Toaster />
       <Cursor />
       {import.meta.env.DEV && <SourcePill />}

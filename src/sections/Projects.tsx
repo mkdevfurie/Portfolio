@@ -1,4 +1,4 @@
-import { useMemo, useState, type PointerEvent } from 'react'
+import { useEffect, useMemo, useState, type PointerEvent } from 'react'
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from 'motion/react'
 import { Reveal } from '@/components/Reveal'
 import { Tag, StatusBadge } from '@/components/Badges'
@@ -171,6 +171,20 @@ export function Projects() {
   const projects = useProjects()
   const [openId, setOpenId] = useState<string | null>(null)
   const [filter, setFilter] = useState<Filter>('all')
+
+  // ouverture d'un projet depuis le terminal (« ouvrir <projet> »)
+  useEffect(() => {
+    const onOpen = (e: Event) => {
+      const slug = (e as CustomEvent<string>).detail
+      const p = projects.find((x) => x.slug === slug)
+      if (p) {
+        setFilter('all')
+        setOpenId(p._id)
+      }
+    }
+    window.addEventListener('open-project', onOpen)
+    return () => window.removeEventListener('open-project', onOpen)
+  }, [projects])
   const open = projects.find((p) => p._id === openId) ?? null
   const shown = useMemo(() => projects.filter((p) => matches(p, filter)), [projects, filter])
   const counts = useMemo(

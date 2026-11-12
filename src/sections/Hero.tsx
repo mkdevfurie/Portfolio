@@ -2,6 +2,7 @@ import { motion } from 'motion/react'
 import { useSettings } from '@/content/hooks'
 import { scrollToSection } from '@/lib/scroll'
 import { fadeUp as item, staggerParent as container } from '@/lib/motion'
+import { openTerminal } from '@/components/Terminal'
 
 export function Hero() {
   const s = useSettings()
@@ -37,6 +38,12 @@ export function Hero() {
           </button>
           <button className="btn btn--ghost" onClick={() => scrollToSection('contact')}>
             Me contacter
+          </button>
+          <button className="btn btn--term" onClick={openTerminal} title="Ouvrir le terminal (touche ²)">
+            <span className="btn--term__prompt" aria-hidden>
+              &gt;_
+            </span>
+            Terminal
           </button>
         </motion.div>
 
