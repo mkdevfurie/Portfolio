@@ -1,5 +1,6 @@
 import { Reveal } from '@/components/Reveal'
 import { useSkills } from '@/content/hooks'
+import { ScrambleText } from '@/components/ScrambleText'
 
 export function Skills() {
   const skills = useSkills()
@@ -8,7 +9,7 @@ export function Skills() {
     <section id="skills" className="section">
       <div className="section__inner">
         <Reveal>
-          <span className="eyebrow">Compétences</span>
+          <span className="eyebrow"><ScrambleText text="Compétences" /></span>
           <h2 className="section__title">Stack & outils</h2>
           <p className="section__lead">
             Les technologies avec lesquelles je travaille au quotidien.

@@ -5,6 +5,8 @@ import { currentSectionIndex, scrollToSection } from '@/lib/scroll'
 import { useSettings } from '@/content/hooks'
 import { EASE } from '@/lib/motion'
 import { ThemeSwitcher } from './ThemeSwitcher'
+import { Logo } from './Logo'
+import { openCommandPalette, PALETTE_SHORTCUT } from './CommandPalette'
 
 export function Nav() {
   const settings = useSettings()
@@ -39,8 +41,12 @@ export function Nav() {
       transition={{ delay: 0.4, duration: 0.8, ease: EASE }}
     >
       <button className="nav__brand" onClick={() => go('hero')} aria-label="Retour en haut">
-        {settings.firstName}
-        <span>{settings.lastName}</span>
+        <Logo size={24} />
+        <span className="nav__brand-sep" aria-hidden />
+        <span className="nav__brand-name">
+          {settings.firstName}
+          <span>{settings.lastName}</span>
+        </span>
       </button>
 
       <nav className={`nav__links ${open ? 'is-open' : ''}`}>
@@ -61,6 +67,13 @@ export function Nav() {
       </nav>
 
       <div className="nav__actions">
+        <button className="nav__cmd" onClick={openCommandPalette} aria-label="Ouvrir la palette de commandes" title="Commandes rapides">
+          <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden>
+            <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" strokeWidth="2" />
+            <path d="M20 20l-3.5-3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          </svg>
+          <kbd>{PALETTE_SHORTCUT}</kbd>
+        </button>
         <ThemeSwitcher />
         <button
         className={`nav__burger ${open ? 'is-open' : ''}`}

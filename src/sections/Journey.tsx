@@ -1,5 +1,6 @@
 import { Reveal } from '@/components/Reveal'
 import { useExperience } from '@/content/hooks'
+import { ScrambleText } from '@/components/ScrambleText'
 
 export function Journey() {
   const entries = useExperience()
@@ -8,7 +9,7 @@ export function Journey() {
     <section id="journey" className="section">
       <div className="section__inner">
         <Reveal>
-          <span className="eyebrow">Parcours</span>
+          <span className="eyebrow"><ScrambleText text="Parcours" /></span>
           <h2 className="section__title">Expérience & formation</h2>
         </Reveal>
 

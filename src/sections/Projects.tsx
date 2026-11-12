@@ -5,6 +5,7 @@ import { Tag, StatusBadge } from '@/components/Badges'
 import { useProjects } from '@/content/hooks'
 import { EASE } from '@/lib/motion'
 import type { Project } from '@/types/content'
+import { ScrambleText } from '@/components/ScrambleText'
 
 type Filter = 'all' | 'web' | 'mobile' | 'ia'
 
@@ -181,7 +182,7 @@ export function Projects() {
     <section id="projects" className="section">
       <div className="section__inner">
         <Reveal>
-          <span className="eyebrow">Projets</span>
+          <span className="eyebrow"><ScrambleText text="Projets" /></span>
           <h2 className="section__title">Réalisations sélectionnées</h2>
           <p className="section__lead">
             Plateformes web, applications mobiles et outils IA : {projects.length} projets

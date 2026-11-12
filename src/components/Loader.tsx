@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { onSceneReady } from '@/lib/sceneReady'
+import { Logo } from './Logo'
 
 const MIN_MS = 900
 const HARD_CAP_MS = 3500
@@ -42,10 +43,11 @@ export function Loader() {
   return (
     <div className={`loader${leaving ? ' loader--leaving' : ''}`} aria-hidden={leaving}>
       <div className="loader__mark">
-        <span className="loader__ring" />
-        <span className="loader__pct">{Math.round(pct)}%</span>
+        <Logo size={64} draw />
       </div>
-      <p className="loader__label">Construction de l'espace…</p>
+      <p className="loader__label">
+        Construction de l'espace… <span className="loader__pct">{Math.round(pct)}%</span>
+      </p>
       <div className="loader__bar">
         <span className="loader__fill" style={{ width: `${pct}%` }} />
       </div>

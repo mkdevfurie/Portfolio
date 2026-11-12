@@ -1,5 +1,6 @@
 import { Reveal } from '@/components/Reveal'
 import { useServices, useSettings } from '@/content/hooks'
+import { ScrambleText } from '@/components/ScrambleText'
 
 export function About() {
   const s = useSettings()
@@ -11,7 +12,7 @@ export function About() {
         <div className="about__grid">
           <div className="about__intro">
             <Reveal>
-              <span className="eyebrow">À propos</span>
+              <span className="eyebrow"><ScrambleText text="À propos" /></span>
               <h2 className="section__title">
                 Je transforme des besoins métier en produits fiables.
               </h2>

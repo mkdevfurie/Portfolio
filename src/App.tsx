@@ -8,6 +8,10 @@ import { Nav } from '@/components/Nav'
 import { SourcePill } from '@/components/SourcePill'
 import { ScrollProgress } from '@/components/ScrollProgress'
 import { ThemeProvider } from '@/theme/ThemeProvider'
+import { Cursor } from '@/components/Cursor'
+import { CommandPalette } from '@/components/CommandPalette'
+import { BackToTop } from '@/components/BackToTop'
+import { Toaster } from '@/components/Toaster'
 import { Hero } from '@/sections/Hero'
 import { About } from '@/sections/About'
 import { Projects } from '@/sections/Projects'
@@ -51,6 +55,10 @@ function Shell() {
         <Footer />
       </main>
 
+      <BackToTop />
+      <CommandPalette />
+      <Toaster />
+      <Cursor />
       {import.meta.env.DEV && <SourcePill />}
     </>
   )

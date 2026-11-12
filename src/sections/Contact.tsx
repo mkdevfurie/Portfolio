@@ -1,6 +1,9 @@
 import { useState, type FormEvent } from 'react'
 import { Reveal } from '@/components/Reveal'
 import { useSettings } from '@/content/hooks'
+import { ScrambleText } from '@/components/ScrambleText'
+import { LocalTime } from '@/components/LocalTime'
+import { copyText } from '@/lib/toast'
 
 type Status = 'idle' | 'sending' | 'ok' | 'error'
 
@@ -51,19 +54,34 @@ export function Contact() {
         <div className="contact__grid">
           <div className="contact__lede">
             <Reveal>
-              <span className="eyebrow">Contact</span>
+              <span className="eyebrow"><ScrambleText text="Contact" /></span>
               <h2 className="section__title">Un projet en tête ?</h2>
               <p className="section__lead">
                 Parlons-en. Réponse sous 24–48 h.
               </p>
+              <LocalTime />
             </Reveal>
 
             <Reveal delay={0.1}>
               <div className="contact__direct">
-                <a href={`mailto:${s.email}`} className="contact__line">
-                  <span>Email</span>
-                  {s.email}
-                </a>
+                <div className="contact__row">
+                  <a href={`mailto:${s.email}`} className="contact__line">
+                    <span>Email</span>
+                    {s.email}
+                  </a>
+                  <button
+                    type="button"
+                    className="contact__copy"
+                    onClick={() => copyText(s.email, 'Email copié dans le presse-papiers')}
+                    aria-label="Copier l'adresse email"
+                    title="Copier"
+                  >
+                    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden>
+                      <rect x="8" y="8" width="12" height="12" rx="2.5" fill="none" stroke="currentColor" strokeWidth="1.8" />
+                      <path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8" fill="none" stroke="currentColor" strokeWidth="1.8" />
+                    </svg>
+                  </button>
+                </div>
                 {whatsappHref && (
                   <a href={whatsappHref} target="_blank" rel="noreferrer" className="contact__line">
                     <span>WhatsApp</span>
